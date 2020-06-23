@@ -14,13 +14,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.billkuker.rocketry.motorsim.Fuel;
 import com.billkuker.rocketry.motorsim.io.MotorIO;
 
 public class FuelResolver {
-	private static final Logger log = Logger.getLogger(FuelResolver.class);
+	private static final Logger log = LogManager.getLogger(FuelResolver.class);
 	
 	public static class FuelNotFound extends Exception {
 		private static final long serialVersionUID = 1L;
@@ -30,9 +31,9 @@ public class FuelResolver {
 		public void fuelsChanged();
 	}
 
-	private static Set<WeakReference<FuelsChangeListener>> listeners = new HashSet<WeakReference<FuelResolver.FuelsChangeListener>>();
-	private static Map<URI, Fuel> fuels = new HashMap<URI, Fuel>();
-	private static Map<Fuel, URI> uris = new HashMap<Fuel, URI>();
+	private static final Set<WeakReference<FuelsChangeListener>> listeners = new HashSet<>();
+	private static final Map<URI, Fuel> fuels = new HashMap<URI, Fuel>();
+	private static final Map<Fuel, URI> uris = new HashMap<Fuel, URI>();
 
 	static {
 		try {
@@ -46,7 +47,7 @@ public class FuelResolver {
 	}
 	
 	public static void addFuelsChangeListener(FuelsChangeListener l){
-		listeners.add(new WeakReference<FuelResolver.FuelsChangeListener>(l));
+		listeners.add(new WeakReference<>(l));
 	}
 	
 	public static void removeFuelsChangeListener(FuelsChangeListener l){
@@ -73,8 +74,6 @@ public class FuelResolver {
 			Fuel fuel = MotorIO.readFuel(new FileInputStream(f));
 			add(fuel, u);
 			return fuel;
-		} catch (FileNotFoundException e) {
-			throw new FuelNotFound();
 		} catch (IOException e) {
 			throw new FuelNotFound();
 		}

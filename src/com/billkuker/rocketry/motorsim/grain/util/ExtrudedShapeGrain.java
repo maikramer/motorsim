@@ -5,8 +5,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.measure.quantity.Area;
 import javax.measure.quantity.Length;
@@ -14,7 +12,6 @@ import javax.measure.quantity.Volume;
 import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
-
 import com.billkuker.rocketry.motorsim.grain.ExtrudedGrain;
 
 public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
@@ -36,12 +33,7 @@ public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
 	};
 	
 	public ExtrudedShapeGrain(){
-		addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				webThickness = null;
-			}
-		});
+		addPropertyChangeListener(evt -> webThickness = null);
 	}
 
 	protected BurningShape xsection = new BurningShape();
@@ -96,11 +88,10 @@ public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
 			return webThickness;
 		java.awt.geom.Area a = getCrossSection(Amount.valueOf(0, SI.MILLIMETER));
 		Rectangle r = a.getBounds();
-		double max = r.getWidth() < r.getHeight() ? r.getHeight() : r
-				.getWidth(); // The max size
+		double max = Math.max(r.getWidth(), r.getHeight()); // The max size
 		double min = 0;
 		double guess;
-		while (true) {
+		do {
 			guess = min + (max - min) / 2; // Guess halfway through
 
 			a = getCrossSection(Amount.valueOf(guess, SI.MILLIMETER));
@@ -111,9 +102,7 @@ public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
 				// min is too big
 				min = guess;
 			}
-			if ((max - min) < .01)
-				break;
-		}
+		} while (!((max - min) < .01));
 		webThickness = Amount.valueOf(guess, SI.MILLIMETER);
 		
 		int ends = numberOfBurningEnds(Amount.valueOf(0, SI.MILLIMETER));

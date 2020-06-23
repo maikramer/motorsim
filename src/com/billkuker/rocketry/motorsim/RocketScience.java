@@ -18,11 +18,12 @@ import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 import javax.measure.unit.UnitFormat;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 public class RocketScience {
-	private static final Logger log = Logger.getLogger(RocketScience.class);
+	private static final Logger log = LogManager.getLogger(RocketScience.class);
 	
 	public static Unit<Pressure> PSI = new ProductUnit<Pressure>(NonSI.POUND_FORCE.divide(NonSI.INCH.pow(2)));
 	public static Unit<Impulse> NEWTON_SECOND = new ProductUnit<Impulse>(SI.NEWTON.times(SI.SECOND));

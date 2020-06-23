@@ -1,8 +1,6 @@
 package com.billkuker.rocketry.motorsim.grain;
 
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.measure.quantity.Length;
 import javax.measure.unit.SI;
@@ -41,11 +39,7 @@ public class EndBurner extends RotatedShapeGrain implements Validating {
 	}
 	
 	public EndBurner(){
-		this.addPropertyChangeListener(new PropertyChangeListener(){
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				generateGeometry();
-			}});
+		addPropertyChangeListener(evt -> generateGeometry());
 		generateGeometry();
 	}
 	

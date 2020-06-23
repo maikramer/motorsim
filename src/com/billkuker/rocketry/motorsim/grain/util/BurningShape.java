@@ -14,12 +14,13 @@ import java.util.Set;
 import javax.measure.quantity.Length;
 import javax.measure.unit.SI;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 public class BurningShape {
 	
-	private static final Logger log = Logger.getLogger(BurningShape.class);
+	private static final Logger log = LogManager.getLogger(BurningShape.class);
 	
 	private static class RegressableShape {
 		private Area a;
@@ -41,11 +42,11 @@ public class BurningShape {
 			Area rCirc = new Area();
 			
 			PathIterator i = a.getPathIterator(new AffineTransform(), .001);
-			double last[] = {0,0};
-			double first[] = {0,0};
+			double[] last = {0,0};
+			double[] first = {0,0};
 
 			while (!i.isDone()) {
-				double coords[] = new double[6];
+				double[] coords = new double[6];
 				int type = i.currentSegment(coords);
 				switch (type){
 					case PathIterator.SEG_MOVETO:
@@ -60,11 +61,11 @@ public class BurningShape {
 						double dx = coords[0]-last[0];
 						double dy = coords[1]-last[1];
 						double len = Math.sqrt(dx*dx + dy*dy);						
-						double normal[] = {-dy/len,dx/len};
+						double[] normal = {-dy/len,dx/len};
 						
 						//Calculate the displacement of the endpoints
 						//to create a rect
-						double displacement[] = {regression*normal[0], regression*normal[1]};
+						double[] displacement = {regression*normal[0], regression*normal[1]};
 
 						//Create that rect. Winding does not seem to matter...
 						GeneralPath p = new GeneralPath();
@@ -129,17 +130,15 @@ public class BurningShape {
 					return false;
 				if ( s.trans != null && trans == null )
 					return false;
-				if ( trans != null && !trans.equals(s.trans) )
-					return false;
-				return true;
+				return trans == null || trans.equals(s.trans);
 			}
 			return false;
 		}
 	}
 	
-	Set<ShapeAndTrans> plus = new HashSet<ShapeAndTrans>();
-	Set<ShapeAndTrans> minus = new HashSet<ShapeAndTrans>();
-	Set<ShapeAndTrans> inhibited = new HashSet<ShapeAndTrans>();
+	Set<ShapeAndTrans> plus = new HashSet<>();
+	Set<ShapeAndTrans> minus = new HashSet<>();
+	Set<ShapeAndTrans> inhibited = new HashSet<>();
 	
 	public void add(Shape s){
 		plus.add(new ShapeAndTrans(s));

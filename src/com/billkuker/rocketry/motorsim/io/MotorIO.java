@@ -29,15 +29,13 @@ public class MotorIO {
 	static class FuelConverter implements Converter{
 
 		@Override
-		public boolean canConvert(@SuppressWarnings("rawtypes") Class c) {
+		public boolean canConvert(Class c) {
 			return Fuel.class.isAssignableFrom(c);
 		}
 
 		@Override
 		public void marshal(Object o, HierarchicalStreamWriter w,
 				MarshallingContext ctx) {
-			/*Fuel f = (Fuel)o;
-			w.setValue(f.getURI().toString());*/
 			Fuel f = (Fuel)o;
 			URI uri = FuelResolver.getURI(f);
 			ctx.convertAnother(uri);
@@ -54,7 +52,7 @@ public class MotorIO {
 			} catch ( ConversionException e ){
 				e.printStackTrace();
 			}
-			if ( uri != null && uri instanceof URI ){
+			if (uri instanceof URI){
 				try {
 					return FuelResolver.getFuel((URI)uri);
 				} catch (FuelNotFound e) {
@@ -64,9 +62,7 @@ public class MotorIO {
 
 			try {
 				return FuelResolver.getFuel(new URI("motorsim:" + c.getSimpleName()));
-			} catch (FuelNotFound e) {
-				Log.error(e);
-			} catch (URISyntaxException e) {
+			} catch (FuelNotFound | URISyntaxException e) {
 				Log.error(e);
 			}
 			return null;
@@ -101,7 +97,7 @@ public class MotorIO {
 			return s.replace("^3", "\u00B3");
 		}
 
-		public boolean canConvert(@SuppressWarnings("rawtypes") Class c) {
+		public boolean canConvert(Class c) {
 			return c.equals(Amount.class);
 		}
 		
@@ -114,7 +110,7 @@ public class MotorIO {
 		xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
 		xstream.registerConverter(new AmountConverter());
 		xstream.registerConverter(new FuelConverter());
-		xstream.registerConverter(new JavaBeanConverter(xstream.getClassMapper(), "class"), -20); 
+		xstream.registerConverter(new JavaBeanConverter(xstream.getMapper(), "class"), -20);
 		return xstream;
 	}
 	
@@ -123,7 +119,7 @@ public class MotorIO {
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
 		xstream.registerConverter(new AmountConverter());
-		xstream.registerConverter(new JavaBeanConverter(xstream.getClassMapper(), "class"), -20); 
+		xstream.registerConverter(new JavaBeanConverter(xstream.getMapper(), "class"), -20);
 		return xstream;
 	}
 	

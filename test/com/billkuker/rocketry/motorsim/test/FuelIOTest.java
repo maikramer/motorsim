@@ -6,9 +6,8 @@ import java.io.ByteArrayOutputStream;
 import javax.measure.quantity.Pressure;
 import javax.measure.unit.SI;
 
-import junit.framework.Assert;
-
 import org.jscience.physics.amount.Amount;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.billkuker.rocketry.motorsim.Fuel;

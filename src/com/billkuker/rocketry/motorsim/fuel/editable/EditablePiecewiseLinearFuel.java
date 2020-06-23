@@ -12,14 +12,15 @@ import javax.measure.quantity.Velocity;
 import javax.measure.quantity.VolumetricDensity;
 import javax.measure.unit.SI;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 import com.billkuker.rocketry.motorsim.RocketScience;
 import com.billkuker.rocketry.motorsim.fuel.EditableCombustionProduct;
 
 public class EditablePiecewiseLinearFuel implements EditableFuel{
-	private static final Logger log = Logger
+	private static final Logger log = LogManager
 			.getLogger(EditablePiecewiseLinearFuel.class);
 	private static final Amount<Pressure> ZERO_PRESSURE = Amount.valueOf(0,
 			SI.PASCAL);
@@ -68,9 +69,9 @@ public class EditablePiecewiseLinearFuel implements EditableFuel{
 			return entries.get(pressure).burnRate;
 		}
 			
-		Entry low = null;
+		Entry low;
 		low = entries.get(entries.headMap(pressure).lastKey());
-		Entry high = null;
+		Entry high;
 		try {
 			high = entries.get(entries.tailMap(pressure).firstKey());
 		} catch ( NoSuchElementException e ){
@@ -94,7 +95,7 @@ public class EditablePiecewiseLinearFuel implements EditableFuel{
 	}
 	
 	public void clear(){
-		entries = new TreeMap<Amount<Pressure>, Entry>();
+		entries = new TreeMap<>();
 		add(Amount.valueOf(0,SI.MEGA(SI.PASCAL)), ZERO_VELOCITY);
 	}
 	
@@ -150,7 +151,7 @@ public class EditablePiecewiseLinearFuel implements EditableFuel{
 	}
 	
 	public Map<Amount<Pressure>, Amount<Velocity>> getEntries() {
-		HashMap<Amount<Pressure>, Amount<Velocity>> ret = new HashMap<Amount<Pressure>, Amount<Velocity>>();
+		HashMap<Amount<Pressure>, Amount<Velocity>> ret = new HashMap<>();
 		for ( Entry e : entries.values() )
 			ret.put(e.pressure, e.burnRate);
 		return ret;

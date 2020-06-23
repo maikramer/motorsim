@@ -13,7 +13,7 @@ import com.billkuker.rocketry.motorsim.RocketScience;
 
 public abstract class SaintRobertFuel implements Fuel {
 	
-	public static enum Type{
+	public enum Type{
 		SI(
 				javax.measure.unit.SI.MILLIMETER.divide(javax.measure.unit.SI.SECOND).asType(Velocity.class),
 				javax.measure.unit.SI.MEGA(javax.measure.unit.SI.PASCAL).asType(Pressure.class)),
@@ -31,7 +31,7 @@ public abstract class SaintRobertFuel implements Fuel {
 		}
 	}
 	
-	private Type t = Type.SI;
+	private Type t;
 	
 	public SaintRobertFuel(Type t){
 		if ( t == null )

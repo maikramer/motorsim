@@ -4,18 +4,17 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.measure.quantity.Area;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Volume;
 import javax.measure.unit.SI;
+import javax.swing.*;
 
+import com.billkuker.rocketry.motorsim.aspects.ChangeListening;
 import org.jscience.physics.amount.Amount;
 
-import com.billkuker.rocketry.motorsim.ChangeListening;
 import com.billkuker.rocketry.motorsim.Grain;
 import com.billkuker.rocketry.motorsim.Validating;
 
@@ -35,7 +34,7 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
 	}
 	
 	public void setGrain(Grain g){
-		if ( grain instanceof ChangeListening.Subject ){
+		if ( grain instanceof ChangeListening.Subject){
 			((ChangeListening.Subject)grain).addPropertyChangeListener(this);
 		}
 		grain = g;
@@ -48,14 +47,10 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
 		return grain;
 	}
 
-	private double flush = 1;
-	private Amount<Length> delay = Amount.valueOf(0, SI.MILLIMETER);
+	private final Amount<Length> delay = Amount.valueOf(0, SI.MILLIMETER);
 	
 	private Amount<Length> spacing = Amount.valueOf(5, SI.MILLIMETER);
 
-	public MultiGrain(){
-	}
-	
 	public MultiGrain( Grain g, int c ){
 		count = c;
 		setGrain(g);
@@ -70,6 +65,7 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
 	}
 	
 	private Amount<Length> getAdjustedRegression(Amount<Length> regression, int grain){
+		double flush = 1;
 		return regression.minus(delay.times(grain)).times(Math.pow(flush,grain));
 	}
 
@@ -90,7 +86,9 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
 	}
 
 	public Amount<Length> webThickness() {
-		return grain.webThickness().plus(delay.times(count));
+		Amount<Length> thickness = grain.webThickness();
+		if(thickness != null) return thickness.plus(delay.times(count));
+		else return Amount.valueOf(0, SI.MILLIMETER);
 	}
 
 	public java.awt.geom.Area getCrossSection(Amount<Length> regression) {
@@ -111,9 +109,7 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
 	}
 
 	public List<Grain> getGrains() {
-		ArrayList<Grain> ret = new ArrayList<Grain>();
-		ret.add(grain);
-		return Collections.unmodifiableList(ret);
+		return List.of(grain);
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {

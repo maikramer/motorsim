@@ -13,14 +13,16 @@ import javax.measure.quantity.Length;
 import javax.measure.quantity.Volume;
 import javax.measure.unit.SI;
 
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 import com.billkuker.rocketry.motorsim.Grain;
 
 public abstract class RotatedShapeGrain implements Grain {
 	
-	private static Logger log = Logger.getLogger(RotatedShapeGrain.class);
+	private static final Logger log = LogManager.getLogger(RotatedShapeGrain.class);
 	
 	public static RotatedShapeGrain DEFAULT_GRAIN = new RotatedShapeGrain(){
 		{
@@ -112,13 +114,10 @@ public abstract class RotatedShapeGrain implements Grain {
 
 	public Amount<Volume> volume(Amount<Length> regression) {
 		Shape squared = square(shape.getShape(regression));
-		Amount<javax.measure.quantity.Area> sum = Amount.valueOf(0, SI.SQUARE_METRE);
-		//for( Area a: ShapeUtil.separate(squared) ){
-		//	sum = sum.plus( ShapeUtil.area(a) );
-		//}
+		Amount.valueOf(0, SI.SQUARE_METRE);
+		Amount<javax.measure.quantity.Area> sum;
 		sum = ShapeUtil.area(squared);
-		Amount<Volume> v = sum.times(Amount.valueOf(Math.PI, SI.MILLIMETER)).to(Volume.UNIT);
-		return v;
+		return sum.times(Amount.valueOf(Math.PI, SI.MILLIMETER)).to(Volume.UNIT);
 	}
 
 	public Amount<Length> webThickness() {
@@ -127,11 +126,10 @@ public abstract class RotatedShapeGrain implements Grain {
 
 		java.awt.geom.Area a = shape.getShape(Amount.valueOf(0, SI.MILLIMETER));
 		Rectangle r = a.getBounds();
-		double max = r.getWidth() < r.getHeight() ? r.getHeight() : r
-				.getWidth(); // The max size
+		double max = Math.max(r.getWidth(), r.getHeight()); // The max size
 		double min = 0;
 		double guess;
-		while (true) {
+		do {
 			guess = min + (max - min) / 2; // Guess halfway through
 			log.debug("Min: " + min + " Guess: " + guess + " Max: " + max);
 			a = shape.getShape(Amount.valueOf(guess, SI.MILLIMETER));
@@ -142,9 +140,7 @@ public abstract class RotatedShapeGrain implements Grain {
 				// min is too big
 				min = guess;
 			}
-			if ((max - min) < .01)
-				break;
-		}
+		} while (!((max - min) < .01));
 		web = Amount.valueOf(guess, SI.MILLIMETER);
 
 		return web;
@@ -155,9 +151,9 @@ public abstract class RotatedShapeGrain implements Grain {
 		PathIterator i = a.getPathIterator(new AffineTransform(), quality.squareFlatteningError);
 		GeneralPath cur = new GeneralPath();
 
-		double last[] = {0,0};
+		double[] last = {0,0};
 		while (!i.isDone()) {
-			double coords[] = new double[6];
+			double[] coords = new double[6];
 			int type = i.currentSegment(coords);
 			switch (type) {
 			case PathIterator.SEG_CLOSE:
@@ -169,7 +165,8 @@ public abstract class RotatedShapeGrain implements Grain {
 				last[1] = coords[1];
 				break;
 			case PathIterator.SEG_CUBICTO:
-				throw new Error("Non-flattened geometry!");
+				case PathIterator.SEG_QUADTO:
+					throw new Error("Non-flattened geometry!");
 			case PathIterator.SEG_LINETO:
 				double x = last[0];
 				double y = last[1];
@@ -183,8 +180,6 @@ public abstract class RotatedShapeGrain implements Grain {
 				last[0] = coords[0];
 				last[1] = coords[1];
 				break;
-			case PathIterator.SEG_QUADTO:
-				throw new Error("Non-flattened geometry!");
 
 			}
 			i.next();
@@ -198,7 +193,7 @@ public abstract class RotatedShapeGrain implements Grain {
 		double mx = 0, my = 0;
 		double len = 0;
 		while (!i.isDone()) {
-			double coords[] = new double[6];
+			double[] coords = new double[6];
 			int type = i.currentSegment(coords);
 			if (type == PathIterator.SEG_LINETO || type == PathIterator.SEG_CLOSE) {
 
@@ -213,10 +208,10 @@ public abstract class RotatedShapeGrain implements Grain {
 				
 				double dy = Math.abs(y-ny);
 				double dx = Math.abs(x-nx);
-				double xl = x>nx?x:nx;
-				double xs = x<nx?x:nx;	
+				double xl = Math.max(x, nx);
+				double xs = Math.min(x, nx);
 				
-				double add = 0;
+				double add;
 				if ( dx == 0 ){
 					//Cylender
 					add = 2 * Math.PI * xl * dy;

@@ -1,20 +1,11 @@
 package com.billkuker.rocketry.motorsim;
-
-import javax.measure.quantity.Dimensionless;
-import javax.measure.quantity.Duration;
-import javax.measure.quantity.Force;
-import javax.measure.quantity.Mass;
-import javax.measure.quantity.Pressure;
-import javax.measure.quantity.Volume;
-import javax.measure.quantity.VolumetricDensity;
-import javax.measure.unit.SI;
-
+import com.billkuker.rocketry.motorsim.Burn.Interval;
 import org.jscience.physics.amount.Amount;
 
-import com.billkuker.rocketry.motorsim.Burn.Interval;
+import javax.measure.quantity.*;
+import javax.measure.unit.SI;
 
 public class BurnSummary {
-
 	Amount<RocketScience.Impulse> ns = Amount.valueOf(0,
 			RocketScience.NEWTON_SECOND);
 
@@ -119,32 +110,23 @@ public class BurnSummary {
 	
 	@Override
 	public String toString(){
-		StringBuilder s = new StringBuilder();
 
-		s.append("====== Burn Summary ======\nRating: ");
-		s.append(getRating());
-		
-		s.append("\nTotal Impulse: ");
-		s.append(RocketScience.ammountToRoundedString(totalImpulse()));
-		
-		s.append("\nISP: ");
-		s.append(RocketScience.ammountToRoundedString(specificImpulse()));
-		
-		s.append("\nThrust: ");
-		s.append("\n\tMax: ");
-		s.append(RocketScience.ammountToRoundedString(maxThrust()));
-		s.append("\n\tAvg: ");
-		s.append(RocketScience.ammountToRoundedString(averageThrust()));
-		
-		s.append("\nMax Pressure: ");
-		s.append(RocketScience.ammountToRoundedString(maxPressure()));
-		
-		s.append("\nBurn Time: ");
-		s.append(RocketScience.ammountToRoundedString(thrustTime()));
-		
-		s.append("\n=======================");
-		
-		return s.toString();
+		return "====== Burn Summary ======\nRating: " +
+				getRating() +
+				"\nTotal Impulse: " +
+				RocketScience.ammountToRoundedString(totalImpulse()) +
+				"\nISP: " +
+				RocketScience.ammountToRoundedString(specificImpulse()) +
+				"\nThrust: " +
+				"\n\tMax: " +
+				RocketScience.ammountToRoundedString(maxThrust()) +
+				"\n\tAvg: " +
+				RocketScience.ammountToRoundedString(averageThrust()) +
+				"\nMax Pressure: " +
+				RocketScience.ammountToRoundedString(maxPressure()) +
+				"\nBurn Time: " +
+				RocketScience.ammountToRoundedString(thrustTime()) +
+				"\n=======================";
 	}
 
 }

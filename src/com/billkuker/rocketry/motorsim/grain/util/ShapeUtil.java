@@ -33,7 +33,7 @@ public class ShapeUtil {
 		double nx, ny;
 		double area = 0;
 		while (!i.isDone()) {
-			double coords[] = new double[6];
+			double[] coords = new double[6];
 			int type = i.currentSegment(coords);
 			switch( type ){
 			case PathIterator.SEG_CLOSE:
@@ -81,7 +81,7 @@ public class ShapeUtil {
 		double x = 0, y = 0;
 		double len = 0;
 		while (!i.isDone()) {
-			double coords[] = new double[6];
+			double[] coords = new double[6];
 			int type = i.currentSegment(coords);
 			if (type == PathIterator.SEG_LINETO) {
 				double nx = coords[0];
@@ -92,8 +92,6 @@ public class ShapeUtil {
 			} else if (type == PathIterator.SEG_MOVETO) {
 				x = coords[0];
 				y = coords[1];
-			} else {
-			
 			}
 			i.next();
 		}
@@ -106,21 +104,22 @@ public class ShapeUtil {
 	 * SO A DONUT WILL TURN INTO TWO CIRCLES.
 	 */
 	public static Set<java.awt.geom.Area> separate(java.awt.geom.Area a) {
-		Set<java.awt.geom.Area> res = new HashSet<java.awt.geom.Area>();
+		Set<java.awt.geom.Area> res = new HashSet<>();
 		PathIterator i = a.getPathIterator(new AffineTransform());
 		GeneralPath cur = null;
 	
 		while (!i.isDone()) {
-			double coords[] = new double[6];
+			double[] coords = new double[6];
 			int type = i.currentSegment(coords);
 			switch (type) {
 			case PathIterator.SEG_CLOSE:
+				assert cur != null;
 				cur.closePath();
-				if (cur != null ){
-					java.awt.geom.Area area = new java.awt.geom.Area(cur);
-					if ( !a.isEmpty() )
-						res.add(area);
-				}
+			{
+				java.awt.geom.Area area = new java.awt.geom.Area(cur);
+				if ( !a.isEmpty() )
+					res.add(area);
+			}
 				cur = new GeneralPath(i.getWindingRule());
 				break;
 			case PathIterator.SEG_MOVETO:
@@ -133,13 +132,16 @@ public class ShapeUtil {
 				cur.moveTo(coords[0], coords[1]);
 				break;
 			case PathIterator.SEG_CUBICTO:
+				assert cur != null;
 				cur.curveTo(coords[0], coords[1], coords[2], coords[3],
 						coords[4], coords[5]);
 				break;
 			case PathIterator.SEG_LINETO:
-				cur.lineTo(coords[0], coords[1]);
+				assert cur != null;
+				cur.lineTo (coords[0], coords[1]);
 				break;
 			case PathIterator.SEG_QUADTO:
+				assert cur != null;
 				cur.quadTo(coords[0], coords[1], coords[2], coords[3]);
 				break;
 	

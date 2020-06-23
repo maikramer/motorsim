@@ -23,14 +23,15 @@ import javax.measure.quantity.Volume;
 import javax.measure.quantity.VolumetricDensity;
 import javax.measure.unit.SI;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 import org.jscience.physics.amount.Constants;
 
 import com.billkuker.rocketry.motorsim.Validating.ValidationException;
 
 public class Burn {
-	private static Logger log = Logger.getLogger(Burn.class);
+	private static Logger log = LogManager.getLogger(Burn.class);
 	
 	private static final BurnSettings settings = new BurnSettings();
 	public static final BurnSettings getBurnSettings(){

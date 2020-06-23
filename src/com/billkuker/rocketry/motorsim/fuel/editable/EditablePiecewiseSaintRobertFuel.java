@@ -33,8 +33,8 @@ public class EditablePiecewiseSaintRobertFuel extends PiecewiseSaintRobertFuel i
 	
 	public void clear(){
 		super.clear();
-		aMap = new HashMap<Amount<Pressure>, Double>();
-		nMap = new HashMap<Amount<Pressure>, Double>();
+		aMap = new HashMap<>();
+		nMap = new HashMap<>();
 	}
 	
 	public void setType(Type t){

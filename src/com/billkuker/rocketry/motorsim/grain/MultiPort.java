@@ -1,23 +1,21 @@
 package com.billkuker.rocketry.motorsim.grain;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.beans.PropertyVetoException;
+import com.billkuker.rocketry.motorsim.Grain;
+import com.billkuker.rocketry.motorsim.Validating;
+import com.billkuker.rocketry.motorsim.grain.util.BurningShape;
+import com.billkuker.rocketry.motorsim.grain.util.ExtrudedShapeGrain;
+import com.billkuker.rocketry.motorsim.gui.visual.Editor;
+import com.billkuker.rocketry.motorsim.gui.visual.GrainPanel;
+import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
-
-import org.jscience.physics.amount.Amount;
-
-import com.billkuker.rocketry.motorsim.Grain;
-import com.billkuker.rocketry.motorsim.Validating;
-import com.billkuker.rocketry.motorsim.grain.util.BurningShape;
-import com.billkuker.rocketry.motorsim.grain.util.ExtrudedShapeGrain;
-import com.billkuker.rocketry.motorsim.visual.Editor;
-import com.billkuker.rocketry.motorsim.visual.GrainPanel;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.beans.PropertyVetoException;
 
 public class MultiPort extends ExtrudedShapeGrain implements Validating {
 

@@ -11,17 +11,17 @@ import org.jscience.physics.amount.Amount;
 public interface Grain {
 	
 	
-	public java.awt.geom.Area getCrossSection(Amount<Length> regression);
-	public java.awt.geom.Area getSideView(Amount<Length> regression);
+	java.awt.geom.Area getCrossSection(Amount<Length> regression);
+	java.awt.geom.Area getSideView(Amount<Length> regression);
 	
-	public interface Composite {
-		public List<Grain> getGrains();
+	interface Composite {
+		List<Grain> getGrains();
 	}
 
-	public Amount<Area> surfaceArea(Amount<Length> regression);
+	Amount<Area> surfaceArea(Amount<Length> regression);
 	
-	public Amount<Volume> volume(Amount<Length> regression);
+	Amount<Volume> volume(Amount<Length> regression);
 	
-	public Amount<Length> webThickness();
+	Amount<Length> webThickness();
 
 }

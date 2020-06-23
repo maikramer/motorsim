@@ -6,14 +6,15 @@ import java.util.TreeMap;
 
 import javax.measure.quantity.Pressure;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 public abstract class PiecewiseSaintRobertFuel extends SaintRobertFuel {
 	
-	private static final Logger log = Logger.getLogger(PiecewiseSaintRobertFuel.class);
+	private static final Logger log = LogManager.getLogger(PiecewiseSaintRobertFuel.class);
 
-	private class Entry{
+	private static class Entry{
 		double a;
 		double n;
 	}

@@ -5,15 +5,9 @@
       <OD>31 mm</OD>
       <length>200 mm</length>
     </chamber>
-    <fuel class="com.billkuker.rocketry.motorsim.fuel.KNSB" serialization="custom">
-      <java.net.URI>
-        <default>
-          <string>motorsim:KNSB</string>
-        </default>
-      </java.net.URI>
-    </fuel>
+    <ejectionDelay>5 s</ejectionDelay>
+    <fuel class="com.billkuker.rocketry.motorsim.fuel.KNSB">motorsim:KNSB</fuel>
     <grain class="com.billkuker.rocketry.motorsim.grain.MultiGrain">
-      <count>2</count>
       <grain class="com.billkuker.rocketry.motorsim.grain.CoredCylindricalGrain">
         <ID>8 mm</ID>
         <OD>29 mm</OD>
@@ -23,7 +17,18 @@
         <length>70 mm</length>
         <outerSurfaceInhibited>true</outerSurfaceInhibited>
       </grain>
+      <count>2</count>
+      <delay>0 mm</delay>
       <spacing>5 mm</spacing>
+      <pcs serialization="custom">
+        <java.beans.PropertyChangeSupport>
+          <default>
+            <source class="com.billkuker.rocketry.motorsim.grain.MultiGrain" reference="/com.billkuker.rocketry.motorsim.Motor/grain"/>
+            <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+          </default>
+          <null/>
+        </java.beans.PropertyChangeSupport>
+      </pcs>
     </grain>
     <name>IOTestMotor</name>
     <nozzle class="com.billkuker.rocketry.motorsim.ConvergentDivergentNozzle">
