@@ -1,36 +1,35 @@
 package com.billkuker.rocketry.motorsim;
 
+import com.billkuker.rocketry.motorsim.RocketScience.MolarWeight;
+import org.jscience.physics.amount.Amount;
+
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.Temperature;
 import javax.measure.quantity.Velocity;
 import javax.measure.quantity.VolumetricDensity;
 
-import org.jscience.physics.amount.Amount;
-
-import com.billkuker.rocketry.motorsim.RocketScience.MolarWeight;
-
 public interface Fuel {
-	
-	public String getName();
 
-	public Amount<VolumetricDensity> getIdealDensity();
+    String getName();
 
-	public Amount<Velocity> burnRate(Amount<Pressure> pressure);
-	
-	public CombustionProduct getCombustionProduct();
-	
-	public interface CombustionProduct {
-		public Amount<Temperature> getIdealCombustionTemperature();
+    Amount<VolumetricDensity> getIdealDensity();
 
-		public Amount<MolarWeight> getEffectiveMolarWeight();
-		
-		public double getRatioOfSpecificHeats();
-		
-		public double getRatioOfSpecificHeats2Phase();
-	}
+    Amount<Velocity> burnRate(Amount<Pressure> pressure);
 
-	public double getDensityRatio();
-	
-	public double getCombustionEfficiency();
+    CombustionProduct getCombustionProduct();
+
+    double getDensityRatio();
+
+    double getCombustionEfficiency();
+
+    interface CombustionProduct {
+        Amount<Temperature> getIdealCombustionTemperature();
+
+        Amount<MolarWeight> getEffectiveMolarWeight();
+
+        double getRatioOfSpecificHeats();
+
+        double getRatioOfSpecificHeats2Phase();
+    }
 
 }

@@ -8,6 +8,7 @@
     <ejectionDelay>5 s</ejectionDelay>
     <fuel class="com.billkuker.rocketry.motorsim.fuel.KNSB">motorsim:KNSB</fuel>
     <grain class="com.billkuker.rocketry.motorsim.grain.MultiGrain">
+      <delay>0 mm</delay>
       <grain class="com.billkuker.rocketry.motorsim.grain.CoredCylindricalGrain">
         <ID>8 mm</ID>
         <OD>29 mm</OD>
@@ -18,7 +19,6 @@
         <outerSurfaceInhibited>true</outerSurfaceInhibited>
       </grain>
       <count>2</count>
-      <delay>0 mm</delay>
       <spacing>5 mm</spacing>
       <pcs serialization="custom">
         <java.beans.PropertyChangeSupport>

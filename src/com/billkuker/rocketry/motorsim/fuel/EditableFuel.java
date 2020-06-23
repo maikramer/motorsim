@@ -1,100 +1,100 @@
 package com.billkuker.rocketry.motorsim.fuel;
 
+import org.jscience.physics.amount.Amount;
+
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.VolumetricDensity;
 import javax.measure.unit.SI;
 
-import org.jscience.physics.amount.Amount;
-
 public class EditableFuel extends SaintRobertFuel {
-	private String name;
-	private double a = 0.0665;
-	private double n = 0.319;
-	private double combustionEfficiency = .97;
-	private double densityRatio = .96;
-	private Amount<VolumetricDensity> idealDensity = Amount.valueOf(1889, 0, SI.KILOGRAM.divide(SI.METER.pow(3))).to(VolumetricDensity.UNIT);
-	CombustionProduct combustionProduct = new EditableCombustionProduct();
-	private SaintRobertFuel.Type type = SaintRobertFuel.Type.NONSI;
-	
-	public EditableFuel() {
-		super(SaintRobertFuel.Type.NONSI);
-	}
-	
-	public String getName() {
-		return name;
-	}
+    CombustionProduct combustionProduct = new EditableCombustionProduct();
+    private String name;
+    private double a = 0.0665;
+    private double n = 0.319;
+    private double combustionEfficiency = .97;
+    private double densityRatio = .96;
+    private Amount<VolumetricDensity> idealDensity = Amount.valueOf(1889, 0, SI.KILOGRAM.divide(SI.METER.pow(3))).to(VolumetricDensity.UNIT);
+    private SaintRobertFuel.Type type = SaintRobertFuel.Type.NONSI;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public EditableFuel() {
+        super(SaintRobertFuel.Type.NONSI);
+    }
 
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	protected double burnrateCoefficient(Amount<Pressure> pressure) {
-		return a;
-	}
-
-	@Override
-	protected double burnrateExponent(Amount<Pressure> pressure) {
-		return n;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
-	public double getA() {
-		return a;
-	}
+    @Override
+    protected double burnrateCoefficient(Amount<Pressure> pressure) {
+        return a;
+    }
 
-	public void setA(double a) {
-		this.a = a;
-	}
+    @Override
+    protected double burnrateExponent(Amount<Pressure> pressure) {
+        return n;
+    }
 
-	public double getCombustionEfficiency() {
-		return combustionEfficiency;
-	}
 
-	public void setCombustionEfficiency(double combustionEfficiency) {
-		this.combustionEfficiency = combustionEfficiency;
-	}
+    public double getA() {
+        return a;
+    }
 
-	public double getDensityRatio() {
-		return densityRatio;
-	}
+    public void setA(double a) {
+        this.a = a;
+    }
 
-	public void setDensityRatio(double densityRatio) {
-		this.densityRatio = densityRatio;
-	}
+    public double getCombustionEfficiency() {
+        return combustionEfficiency;
+    }
 
-	public Amount<VolumetricDensity> getIdealDensity() {
-		return idealDensity;
-	}
+    public void setCombustionEfficiency(double combustionEfficiency) {
+        this.combustionEfficiency = combustionEfficiency;
+    }
 
-	public void setIdealDensity(Amount<VolumetricDensity> idealDensity) {
-		this.idealDensity = idealDensity;
-	}
+    public double getDensityRatio() {
+        return densityRatio;
+    }
 
-	public double getN() {
-		return n;
-	}
+    public void setDensityRatio(double densityRatio) {
+        this.densityRatio = densityRatio;
+    }
 
-	public void setN(double n) {
-		this.n = n;
-	}
+    public Amount<VolumetricDensity> getIdealDensity() {
+        return idealDensity;
+    }
 
-	public CombustionProduct getCombustionProduct() {
-		return combustionProduct;
-	}
+    public void setIdealDensity(Amount<VolumetricDensity> idealDensity) {
+        this.idealDensity = idealDensity;
+    }
 
-	public void setCombustionProduct(CombustionProduct combustionProduct) {
-		this.combustionProduct = combustionProduct;
-	}
+    public double getN() {
+        return n;
+    }
 
-	public SaintRobertFuel.Type getType() {
-		return type;
-	}
+    public void setN(double n) {
+        this.n = n;
+    }
 
-	public void setType(SaintRobertFuel.Type type) {
-		this.type = type;
-	}
+    public CombustionProduct getCombustionProduct() {
+        return combustionProduct;
+    }
+
+    public void setCombustionProduct(CombustionProduct combustionProduct) {
+        this.combustionProduct = combustionProduct;
+    }
+
+    public SaintRobertFuel.Type getType() {
+        return type;
+    }
+
+    public void setType(SaintRobertFuel.Type type) {
+        this.type = type;
+    }
 
 
 }

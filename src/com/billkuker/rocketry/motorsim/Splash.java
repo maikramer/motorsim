@@ -2,15 +2,8 @@ package com.billkuker.rocketry.motorsim;
 
 import com.billkuker.rocketry.motorsim.gui.visual.workbench.MotorWorkbench;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Toolkit;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
 
 class Splash extends JWindow {
     private static final long serialVersionUID = 1L;
@@ -43,14 +36,14 @@ class Splash extends JWindow {
         }, "SplashThread").start();
     }
 
+    public static void main(String[] args) {
+        new Splash("splash.png", 1000);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         g.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
         g.drawString("Version " + MotorWorkbench.version, 140, 150);
-    }
-
-    public static void main(String[] args) {
-        new Splash("splash.png", 1000);
     }
 }

@@ -1,122 +1,118 @@
 package com.billkuker.rocketry.motorsim.fuel.editable;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.billkuker.rocketry.motorsim.fuel.EditableCombustionProduct;
+import com.billkuker.rocketry.motorsim.fuel.PiecewiseSaintRobertFuel;
+import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.VolumetricDensity;
-
-import org.jscience.physics.amount.Amount;
-
-import com.billkuker.rocketry.motorsim.fuel.EditableCombustionProduct;
-import com.billkuker.rocketry.motorsim.fuel.PiecewiseSaintRobertFuel;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditablePiecewiseSaintRobertFuel extends PiecewiseSaintRobertFuel implements EditableFuel {
 
-	@SuppressWarnings("unchecked")
-	private Amount<VolumetricDensity> idealDensity = (Amount<VolumetricDensity>) Amount
-			.valueOf("1 g/mm^3");
-	
-	private double combustionEfficiency = 1;
-	private double densityRatio = 1;
-	private EditableCombustionProduct cp;
-	private String name = "New Fuel";
+    @SuppressWarnings("unchecked")
+    private Amount<VolumetricDensity> idealDensity = (Amount<VolumetricDensity>) Amount
+            .valueOf("1 g/mm^3");
 
-	public EditablePiecewiseSaintRobertFuel() {
-		super(Type.SI);
-		clear();
-		cp = new EditableCombustionProduct();
-	}
-	
-	private Map<Amount<Pressure>, Double> aMap;
-	private Map<Amount<Pressure>, Double> nMap;
-	
-	public void clear(){
-		super.clear();
-		aMap = new HashMap<>();
-		nMap = new HashMap<>();
-	}
-	
-	public void setType(Type t){
-		super.setType(t);
-	}
+    private double combustionEfficiency = 1;
+    private double densityRatio = 1;
+    private EditableCombustionProduct cp;
+    private String name = "New Fuel";
+    private Map<Amount<Pressure>, Double> aMap;
+    private Map<Amount<Pressure>, Double> nMap;
+    public EditablePiecewiseSaintRobertFuel() {
+        super(Type.SI);
+        clear();
+        cp = new EditableCombustionProduct();
+    }
 
-	public void add(Amount<Pressure> p, final double _a, final double _n) {
-		super.add(p, _a, _n);
-		aMap.put(p, _a);
-		nMap.put(p, _n);
-	}
-	
-	public Amount<VolumetricDensity> getIdealDensity() {
-		return idealDensity;
-	}
+    public void clear() {
+        super.clear();
+        aMap = new HashMap<>();
+        nMap = new HashMap<>();
+    }
 
-	public void setIdealDensity(Amount<VolumetricDensity> idealDensity) {
-		this.idealDensity = idealDensity;
-	}
+    public void setType(Type t) {
+        super.setType(t);
+    }
 
-	public double getCombustionEfficiency() {
-		return combustionEfficiency;
-	}
+    public void add(Amount<Pressure> p, final double _a, final double _n) {
+        super.add(p, _a, _n);
+        aMap.put(p, _a);
+        nMap.put(p, _n);
+    }
 
-	public void setCombustionEfficiency(double combustionEfficiency) {
-		this.combustionEfficiency = combustionEfficiency;
-	}
+    public Amount<VolumetricDensity> getIdealDensity() {
+        return idealDensity;
+    }
 
-	public double getDensityRatio() {
-		return densityRatio;
-	}
+    public void setIdealDensity(Amount<VolumetricDensity> idealDensity) {
+        this.idealDensity = idealDensity;
+    }
 
-	public void setDensityRatio(double densityRatio) {
-		this.densityRatio = densityRatio;
-	}
+    public double getCombustionEfficiency() {
+        return combustionEfficiency;
+    }
 
-	@Override
-	public CombustionProduct getCombustionProduct() {
-		return cp;
-	}
-	
-	public void setCombustionProduct(final CombustionProduct product){
-		this.cp = (EditableCombustionProduct)product;
-	}
+    public void setCombustionEfficiency(double combustionEfficiency) {
+        this.combustionEfficiency = combustionEfficiency;
+    }
 
-	@Override
-	public String toString(){
-		return getName();
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
+    public double getDensityRatio() {
+        return densityRatio;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDensityRatio(double densityRatio) {
+        this.densityRatio = densityRatio;
+    }
 
-	public Map<Amount<Pressure>, Double> getAMap() {
-		return aMap;
-	}
+    @Override
+    public CombustionProduct getCombustionProduct() {
+        return cp;
+    }
 
-	public void setAMap(Map<Amount<Pressure>, Double> aMap) {
-		this.aMap = aMap;
-		reset();
-	}
+    public void setCombustionProduct(final CombustionProduct product) {
+        this.cp = (EditableCombustionProduct) product;
+    }
 
-	public Map<Amount<Pressure>, Double> getNMap() {
-		return nMap;
-	}
+    @Override
+    public String toString() {
+        return getName();
+    }
 
-	public void setNMap(Map<Amount<Pressure>, Double> nMap) {
-		this.nMap = nMap;
-		reset();
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	private void reset(){
-		if (nMap != null && aMap != null && nMap.size() == aMap.size()){
-			for ( Amount<Pressure> p : aMap.keySet() ){
-				add(p, aMap.get(p), nMap.get(p));
-			}
-		}
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<Amount<Pressure>, Double> getAMap() {
+        return aMap;
+    }
+
+    public void setAMap(Map<Amount<Pressure>, Double> aMap) {
+        this.aMap = aMap;
+        reset();
+    }
+
+    public Map<Amount<Pressure>, Double> getNMap() {
+        return nMap;
+    }
+
+    public void setNMap(Map<Amount<Pressure>, Double> nMap) {
+        this.nMap = nMap;
+        reset();
+    }
+
+    private void reset() {
+        if (nMap != null && aMap != null && nMap.size() == aMap.size()) {
+            for (Amount<Pressure> p : aMap.keySet()) {
+                add(p, aMap.get(p), nMap.get(p));
+            }
+        }
+    }
 }

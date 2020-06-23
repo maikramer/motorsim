@@ -1,14 +1,23 @@
 package com.billkuker.rocketry.motorsim.gui.visual.workbench;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import com.billkuker.rocketry.motorsim.*;
+import com.billkuker.rocketry.motorsim.aspects.ChangeListening;
+import com.billkuker.rocketry.motorsim.cases.Schedule40;
+import com.billkuker.rocketry.motorsim.cases.Schedule80;
+import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
+import com.billkuker.rocketry.motorsim.fuel.KNSU;
+import com.billkuker.rocketry.motorsim.grain.*;
+import com.billkuker.rocketry.motorsim.gui.Colors;
+import com.billkuker.rocketry.motorsim.gui.visual.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.jscience.physics.amount.Amount;
+
+import javax.measure.quantity.Duration;
+import javax.measure.unit.SI;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -17,60 +26,18 @@ import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
-import javax.measure.quantity.Duration;
-import javax.measure.unit.SI;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-
-import com.billkuker.rocketry.motorsim.aspects.ChangeListening;
-import com.billkuker.rocketry.motorsim.gui.Colors;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.jscience.physics.amount.Amount;
-
-import com.billkuker.rocketry.motorsim.Burn;
-import com.billkuker.rocketry.motorsim.Chamber;
-import com.billkuker.rocketry.motorsim.ConvergentDivergentNozzle;
-import com.billkuker.rocketry.motorsim.CylindricalChamber;
-import com.billkuker.rocketry.motorsim.Fuel;
-import com.billkuker.rocketry.motorsim.Grain;
-import com.billkuker.rocketry.motorsim.Motor;
-import com.billkuker.rocketry.motorsim.cases.Schedule40;
-import com.billkuker.rocketry.motorsim.cases.Schedule80;
-import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
-import com.billkuker.rocketry.motorsim.fuel.KNSU;
-import com.billkuker.rocketry.motorsim.grain.CSlot;
-import com.billkuker.rocketry.motorsim.grain.CoredCylindricalGrain;
-import com.billkuker.rocketry.motorsim.grain.EndBurner;
-import com.billkuker.rocketry.motorsim.grain.Finocyl;
-import com.billkuker.rocketry.motorsim.grain.Moonburner;
-import com.billkuker.rocketry.motorsim.grain.MultiGrain;
-import com.billkuker.rocketry.motorsim.grain.MultiPort;
-import com.billkuker.rocketry.motorsim.grain.RodAndTubeGrain;
-import com.billkuker.rocketry.motorsim.grain.Square;
-import com.billkuker.rocketry.motorsim.grain.Star;
-import com.billkuker.rocketry.motorsim.gui.visual.BurnPanel;
-import com.billkuker.rocketry.motorsim.gui.visual.ClassChooser;
-import com.billkuker.rocketry.motorsim.gui.visual.Editor;
-import com.billkuker.rocketry.motorsim.gui.visual.GrainPanel;
-import com.billkuker.rocketry.motorsim.gui.visual.HardwarePanel;
-import com.billkuker.rocketry.motorsim.gui.visual.SummaryPanel;
-
 public class MotorEditor extends JPanel implements PropertyChangeListener, FuelResolver.FuelsChangeListener {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LogManager.getLogger(MotorEditor.class);
+    //private static final int XML_TAB = 0;
+    private static final int CASING_TAB = 0;
+    private static final int GRAIN_TAB = 1;
+    private static final int BURN_TAB = 2;
+    private static int idx;
+    private final Vector<BurnWatcher> burnWatchers = new Vector<>();
+    private final DefaultComboBoxModel<Fuel> availableFuels = new DefaultComboBoxModel<>();
+    private final List<Class<? extends Grain>> grainTypes = new Vector<>();
+    private final List<Class<? extends Chamber>> chamberTypes = new Vector<>();
     Motor motor;
     GrainEditor grainEditor;
     BurnTab bt;
@@ -80,8 +47,23 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
     JTabbedPane tabs;
     boolean closed = false;
 
-    private final Vector<BurnWatcher> burnWatchers = new Vector<>();
-    private final DefaultComboBoxModel<Fuel> availableFuels = new DefaultComboBoxModel<>();
+    {
+        grainTypes.add(CoredCylindricalGrain.class);
+        grainTypes.add(Finocyl.class);
+        grainTypes.add(Star.class);
+        grainTypes.add(Moonburner.class);
+        grainTypes.add(RodAndTubeGrain.class);
+        grainTypes.add(CSlot.class);
+        grainTypes.add(EndBurner.class);
+        grainTypes.add(MultiPort.class);
+        grainTypes.add(Square.class);
+    }
+
+    {
+        chamberTypes.add(CylindricalChamber.class);
+        chamberTypes.add(Schedule40.class);
+        chamberTypes.add(Schedule80.class);
+    }
 
     public MotorEditor(Motor m) {
         setLayout(new BorderLayout());
@@ -96,6 +78,53 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
         Burn.getBurnSettings().addPropertyChangeListener(this);
     }
 
+    public static Motor defaultMotor() {
+        Motor m = new Motor();
+        m.setName("New Motor " + ++idx);
+        try {
+            m.setFuel(FuelResolver.getFuel(new URI("motorsim:KNDX")));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+
+        CylindricalChamber c = new CylindricalChamber();
+        c.setLength(Amount.valueOf(420, SI.MILLIMETER));
+        c.setID(Amount.valueOf(70, SI.MILLIMETER));
+        c.setOD(Amount.valueOf(72, SI.MILLIMETER));
+        m.setChamber(c);
+
+        CoredCylindricalGrain g = new CoredCylindricalGrain();
+        try {
+            g.setLength(Amount.valueOf(100, SI.MILLIMETER));
+            g.setOD(Amount.valueOf(62, SI.MILLIMETER));
+            g.setID(Amount.valueOf(20, SI.MILLIMETER));
+        } catch (PropertyVetoException v) {
+            throw new Error(v);
+        }
+
+        MultiGrain mg = new MultiGrain(g, 4);
+        mg.setSpacing(Amount.valueOf(6, SI.MILLIMETER));
+        m.setGrain(mg);
+
+        ConvergentDivergentNozzle n = new ConvergentDivergentNozzle();
+        n.setThroatDiameter(Amount.valueOf(14.089, SI.MILLIMETER));
+        n.setExitDiameter(Amount.valueOf(44.55, SI.MILLIMETER));
+        n.setEfficiency(.85);
+        m.setNozzle(n);
+
+        return m;
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") Vector<Fuel> ff = new Vector<>();
+        ff.add(new KNSU());
+    }
+
     @Override
     public void fuelsChanged() {
         while (availableFuels.getSize() > 0 && availableFuels.getIndexOf(availableFuels.getSelectedItem()) != 0)
@@ -108,31 +137,45 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
         }
     }
 
-    //private static final int XML_TAB = 0;
-    private static final int CASING_TAB = 0;
-    private static final int GRAIN_TAB = 1;
-    private static final int BURN_TAB = 2;
-
-    private final List<Class<? extends Grain>> grainTypes = new Vector<>();
-
-    {
-        grainTypes.add(CoredCylindricalGrain.class);
-        grainTypes.add(Finocyl.class);
-        grainTypes.add(Star.class);
-        grainTypes.add(Moonburner.class);
-        grainTypes.add(RodAndTubeGrain.class);
-        grainTypes.add(CSlot.class);
-        grainTypes.add(EndBurner.class);
-        grainTypes.add(MultiPort.class);
-        grainTypes.add(Square.class);
+    public Motor getMotor() {
+        return motor;
     }
 
-    private final List<Class<? extends Chamber>> chamberTypes = new Vector<>();
 
-    {
-        chamberTypes.add(CylindricalChamber.class);
-        chamberTypes.add(Schedule40.class);
-        chamberTypes.add(Schedule80.class);
+    private void setMotor(Motor m) {
+        if (motor != null)
+            motor.removePropertyChangeListener(this);
+        motor = m;
+        motor.addPropertyChangeListener(this);
+        if (grainEditor != null)
+            remove(grainEditor);
+        while (tabs.getTabCount() > 1)
+            tabs.removeTabAt(1);
+        tabs.add(new CaseEditor(), CASING_TAB);
+        tabs.add(new GrainEditor(motor.getGrain()), GRAIN_TAB);
+        tabs.add(bt = new BurnTab(), BURN_TAB);
+    }
+
+    public void addBurnWatcher(BurnWatcher bw) {
+        burnWatchers.add(bw);
+    }
+
+    @Deprecated
+    public void showAsWindow() {
+        JFrame f = new JFrame();
+        f.setSize(1024, 768);
+        f.setContentPane(this);
+        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        f.setVisible(true);
+    }
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (!evt.getPropertyName().equals("Name")) {
+            bt.reBurn();
+        } else {
+            for (BurnWatcher bw : burnWatchers)
+                bw.replace(burn, burn);
+        }
     }
 
     private class BurnTab extends JPanel {
@@ -143,10 +186,6 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             setLayout(new BorderLayout());
             setName("Simulation Results");
             reBurn();
-        }
-
-        private class BurnCanceled extends RuntimeException {
-            private static final long serialVersionUID = 1L;
         }
 
         public void reBurn() {
@@ -217,6 +256,10 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
                 }
             };
             currentThread.start();
+        }
+
+        private class BurnCanceled extends RuntimeException {
+            private static final long serialVersionUID = 1L;
         }
     }
 
@@ -293,42 +336,11 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
 
     private class CaseEditor extends JSplitPane implements ComponentListener {
         private static final long serialVersionUID = 1L;
-
-        private HardwarePanel hp;
         private final JPanel casing;
         private final JPanel nozzle;
+        private HardwarePanel hp;
         private Editor casingEditor;
         private Editor nozzleEditor;
-
-        private void setup() {
-            if (casingEditor != null)
-                casing.remove(casingEditor);
-            casingEditor = new Editor(motor.getChamber());
-            casingEditor.setAlignmentX(LEFT_ALIGNMENT);
-            casing.add(casingEditor);
-
-            if (nozzleEditor != null)
-                nozzle.remove(nozzleEditor);
-            nozzleEditor = new Editor(motor.getNozzle());
-            nozzleEditor.setAlignmentX(LEFT_ALIGNMENT);
-            nozzle.add(nozzleEditor);
-
-            if (hp != null)
-                remove(hp);
-            setBottomComponent(hp = new HardwarePanel(motor));
-            if (motor.getNozzle() instanceof ChangeListening.Subject) {
-                ((ChangeListening.Subject) motor.getNozzle())
-                        .addPropertyChangeListener(MotorEditor.this);
-            }
-            if (motor.getChamber() instanceof ChangeListening.Subject) {
-                ((ChangeListening.Subject) motor.getChamber())
-                        .addPropertyChangeListener(MotorEditor.this);
-            }
-            if (motor.getFuel() instanceof ChangeListening.Subject) {
-                ((ChangeListening.Subject) motor.getFuel())
-                        .addPropertyChangeListener(MotorEditor.this);
-            }
-        }
 
         public CaseEditor() {
             super(JSplitPane.VERTICAL_SPLIT);
@@ -490,6 +502,36 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             setup();
         }
 
+        private void setup() {
+            if (casingEditor != null)
+                casing.remove(casingEditor);
+            casingEditor = new Editor(motor.getChamber());
+            casingEditor.setAlignmentX(LEFT_ALIGNMENT);
+            casing.add(casingEditor);
+
+            if (nozzleEditor != null)
+                nozzle.remove(nozzleEditor);
+            nozzleEditor = new Editor(motor.getNozzle());
+            nozzleEditor.setAlignmentX(LEFT_ALIGNMENT);
+            nozzle.add(nozzleEditor);
+
+            if (hp != null)
+                remove(hp);
+            setBottomComponent(hp = new HardwarePanel(motor));
+            if (motor.getNozzle() instanceof ChangeListening.Subject) {
+                ((ChangeListening.Subject) motor.getNozzle())
+                        .addPropertyChangeListener(MotorEditor.this);
+            }
+            if (motor.getChamber() instanceof ChangeListening.Subject) {
+                ((ChangeListening.Subject) motor.getChamber())
+                        .addPropertyChangeListener(MotorEditor.this);
+            }
+            if (motor.getFuel() instanceof ChangeListening.Subject) {
+                ((ChangeListening.Subject) motor.getFuel())
+                        .addPropertyChangeListener(MotorEditor.this);
+            }
+        }
+
         @Override
         public void componentHidden(ComponentEvent arg0) {
 
@@ -509,97 +551,6 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
         @Override
         public void componentShown(ComponentEvent arg0) {
 
-        }
-    }
-
-
-    public Motor getMotor() {
-        return motor;
-    }
-
-
-    private void setMotor(Motor m) {
-        if (motor != null)
-            motor.removePropertyChangeListener(this);
-        motor = m;
-        motor.addPropertyChangeListener(this);
-        if (grainEditor != null)
-            remove(grainEditor);
-        while (tabs.getTabCount() > 1)
-            tabs.removeTabAt(1);
-        tabs.add(new CaseEditor(), CASING_TAB);
-        tabs.add(new GrainEditor(motor.getGrain()), GRAIN_TAB);
-        tabs.add(bt = new BurnTab(), BURN_TAB);
-    }
-
-    private static int idx;
-
-    public static Motor defaultMotor() {
-        Motor m = new Motor();
-        m.setName("New Motor " + ++idx);
-        try {
-            m.setFuel(FuelResolver.getFuel(new URI("motorsim:KNDX")));
-        } catch (Exception e) {
-            throw new Error(e);
-        }
-
-        CylindricalChamber c = new CylindricalChamber();
-        c.setLength(Amount.valueOf(420, SI.MILLIMETER));
-        c.setID(Amount.valueOf(70, SI.MILLIMETER));
-        c.setOD(Amount.valueOf(72, SI.MILLIMETER));
-        m.setChamber(c);
-
-        CoredCylindricalGrain g = new CoredCylindricalGrain();
-        try {
-            g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-            g.setOD(Amount.valueOf(62, SI.MILLIMETER));
-            g.setID(Amount.valueOf(20, SI.MILLIMETER));
-        } catch (PropertyVetoException v) {
-            throw new Error(v);
-        }
-
-        MultiGrain mg = new MultiGrain(g, 4);
-        mg.setSpacing(Amount.valueOf(6, SI.MILLIMETER));
-        m.setGrain(mg);
-
-        ConvergentDivergentNozzle n = new ConvergentDivergentNozzle();
-        n.setThroatDiameter(Amount.valueOf(14.089, SI.MILLIMETER));
-        n.setExitDiameter(Amount.valueOf(44.55, SI.MILLIMETER));
-        n.setEfficiency(.85);
-        m.setNozzle(n);
-
-        return m;
-    }
-
-    public void addBurnWatcher(BurnWatcher bw) {
-        burnWatchers.add(bw);
-    }
-
-    @Deprecated
-    public void showAsWindow() {
-        JFrame f = new JFrame();
-        f.setSize(1024, 768);
-        f.setContentPane(this);
-        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        f.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") Vector<Fuel> ff = new Vector<>();
-        ff.add(new KNSU());
-    }
-
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (!evt.getPropertyName().equals("Name")) {
-            bt.reBurn();
-        } else {
-            for (BurnWatcher bw : burnWatchers)
-                bw.replace(burn, burn);
         }
     }
 

@@ -2,15 +2,13 @@ package com.billkuker.rocketry.motorsim;
 
 import com.billkuker.rocketry.motorsim.gui.visual.workbench.MotorWorkbench;
 
+import javax.swing.*;
 import java.util.Locale;
-
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 
 public class MotorSim {
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
         try {
