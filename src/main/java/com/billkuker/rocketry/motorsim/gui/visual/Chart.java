@@ -10,13 +10,12 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleInsets;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jscience.physics.amount.Amount;
-
 import javax.measure.quantity.Area;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Quantity;
@@ -38,25 +37,21 @@ import java.util.concurrent.ThreadFactory;
 public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implements RocketScience.UnitPreferenceListener {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LogManager.getLogger(Chart.class);
-    private static final ThreadFactory fastTF = new ThreadFactory() {
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r);
-            t.setDaemon(true);
-            t.setName("Fast Chart Draw");
-            return t;
-        }
+    private static final ThreadFactory fastTF = r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("Fast Chart Draw");
+        return t;
     };
-    private static final ThreadFactory slowTF = new ThreadFactory() {
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r);
-            t.setDaemon(true);
-            t.setName("Slow Chart Draw");
-            return t;
-        }
+    private static final ThreadFactory slowTF = r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("Slow Chart Draw");
+        return t;
     };
     private static final ExecutorService fast = Executors.newFixedThreadPool(2, fastTF);
     private static final ExecutorService slow = Executors.newFixedThreadPool(2, slowTF);
-    private final Stroke dashed = new BasicStroke(1, 1, 1, 1, new float[]{2, 4}, 0);
+    private final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{2, 4}, 0);
     private final Font labelFont = new Font(Font.DIALOG, Font.BOLD, 10);
     XYSeriesCollection dataset = new XYSeriesCollection();
     JFreeChart chart;
@@ -102,13 +97,13 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
         g.setOD(Amount.valueOf(30, SI.MILLIMETER));
         g.setID(Amount.valueOf(10, SI.MILLIMETER));
 
-        Chart<Length, Area> c = new Chart<Length, Area>(SI.MILLIMETER,
+        Chart<Length, Area> c = new Chart<>(SI.MILLIMETER,
                 SI.MILLIMETER.pow(2).asType(Area.class), g, "surfaceArea", "Regression", "Area");
 
         c.setDomain(c.new IntervalDomain(Amount.valueOf(0, SI.CENTIMETER), g
                 .webThickness()));
 
-        c.show();
+        c.setVisible(true);
 
 		/*
 		Chart<Length, Volume> v = new Chart<Length, Volume>(SI.MILLIMETER,
@@ -146,8 +141,7 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
                     public void actionPerformed(ActionEvent ae) {
                         XYSeries s = dataset.getSeries(0);
                         StringBuilder sb = new StringBuilder();
-                        sb.append(f.getName().substring(0, 1).toUpperCase()
-                                + f.getName().substring(1));
+                        sb.append(f.getName().substring(0, 1).toUpperCase()).append(f.getName().substring(1));
                         sb.append("\n");
                         sb.append(Chart.this.chart.getXYPlot().getDomainAxis().getLabel());
                         sb.append(",");
@@ -235,8 +229,8 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
      * Get the Y value at or near a given X
      * For display use only!
      *
-     * @param ax
-     * @return
+     * @param ax -
+     * @return Is near?
      */
     private Amount<Y> getNear(final Amount<X> ax) {
         if (dataset.getSeriesCount() != 1)
@@ -254,14 +248,13 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
             delta = delta / 2;
             if (delta < 1) {
                 int idxL = idx - 1;
-                int idxH = idx;
                 final double lowerX = s.getX(idxL).doubleValue();
-                final double higherX = s.getX(idxH).doubleValue();
+                final double higherX = s.getX(idx).doubleValue();
                 final double sampleXDiff = higherX - lowerX;
                 final double xDiff = x - lowerX;
                 final double dist = xDiff / sampleXDiff;
                 final double lowerY = s.getY(idxL).doubleValue();
-                final double higherY = s.getY(idxH).doubleValue();
+                final double higherY = s.getY(idx).doubleValue();
                 final double y = lowerY + dist * (higherY - lowerY);
 
                 return Amount.valueOf(y, yUnit);
@@ -279,19 +272,15 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
         lastSkipStepShown = Integer.MAX_VALUE;
         stop = true;
         fill(d, 100);
-        fast.submit(new Thread() {
-            public void run() {
-                if (!stop)
-                    fill(d, 10);
-                slow.submit(new Thread() {
-                    public void run() {
-                        if (!stop) {
-                            fill(d, 1);
-                        }
-                    }
-                });
-            }
-        });
+        fast.submit(new Thread(() -> {
+            if (!stop)
+                fill(d, 10);
+            slow.submit(new Thread(() -> {
+                if (!stop) {
+                    fill(d, 1);
+                }
+            }));
+        }));
     }
 
     @SuppressWarnings("unchecked")
@@ -300,7 +289,7 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
 
         log.debug(f.getName() + " " + requestedSkip + " Start");
         stop = false;
-        int sz = 0;
+        int sz;
         int calculatedSkip = requestedSkip;
         if (d instanceof Collection) {
             sz = ((Collection<Amount<X>>) d).size();
@@ -327,32 +316,27 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
                 cnt++;
             }
             Amount<Y> y = (Amount<Y>) f.invoke(source, last);
+            assert last != null;
             newSeries.add(last.doubleValue(xUnit), y.doubleValue(yUnit));
-            SwingUtilities.invokeLater(new Thread() {
-                @Override
-                public void run() {
-                    if (requestedSkip < lastSkipStepShown) {
-                        lastSkipStepShown = requestedSkip;
-                        dataset.removeAllSeries();
-                        dataset.addSeries(newSeries);
-                        log.debug(f.getName() + " Replaced with " + requestedSkip);
-                    }
-                    if (requestedSkip == 1) {
-                        drawDone();
-                    }
+            SwingUtilities.invokeLater(new Thread(() -> {
+                if (requestedSkip < lastSkipStepShown) {
+                    lastSkipStepShown = requestedSkip;
+                    dataset.removeAllSeries();
+                    dataset.addSeries(newSeries);
+                    log.debug(f.getName() + " Replaced with " + requestedSkip);
                 }
-            });
-        } catch (IllegalArgumentException e) {
-            log.error(e);
-        } catch (IllegalAccessException e) {
-            log.error(e);
-        } catch (InvocationTargetException e) {
+                if (requestedSkip == 1) {
+                    drawDone();
+                }
+            }));
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             log.error(e);
         }
         log.debug(f.getName() + " " + calculatedSkip + " Done");
     }
 
-    public void show() {
+    @Override
+    public void setVisible(boolean visible) {
         new JFrame() {
             private static final long serialVersionUID = 1L;
 
@@ -361,7 +345,7 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
                 setSize(640, 480);
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
             }
-        }.setVisible(true);
+        }.setVisible(visible);
     }
 
     public class IntervalDomain implements Iterable<Amount<X>> {

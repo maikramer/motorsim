@@ -13,7 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="MotorSim" target="11" />
+      <module name="MotorSim" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

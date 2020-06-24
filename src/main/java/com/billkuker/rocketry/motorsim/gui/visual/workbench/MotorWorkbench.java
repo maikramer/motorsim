@@ -263,23 +263,26 @@ public class MotorWorkbench extends RememberJFrame {
                                         addActionListener(e -> new DebugFrame());
                                     }
                                 });
-                                add(new JMenuItem("Log Window") {
-                                    LF5Appender lf5;
-                                    private static final long serialVersionUID = 1L;
+                                try{
+                                    //noinspection unused
+                                    Class<?> test = Class.forName("LF5Appender");
+                                    add(new JMenuItem("Log Window") {
+                                        LF5Appender lf5;
+                                        private static final long serialVersionUID = 1L;
+                                        {
+                                            addActionListener(e -> {
 
-                                    {
-                                        addActionListener(new ActionListener() {
-                                            @Override
-                                            public void actionPerformed(ActionEvent e) {
                                                 if (lf5 == null) {
                                                     lf5 = new LF5Appender();
                                                     Logger.getRootLogger().addAppender(lf5);
                                                 }
                                                 lf5.getLogBrokerMonitor().show();
-                                            }
-                                        });
-                                    }
-                                });
+                                            });
+                                        }
+                                    });
+                                } catch (ClassNotFoundException ignored){
+                                }
+
                             }
                         });
                     }

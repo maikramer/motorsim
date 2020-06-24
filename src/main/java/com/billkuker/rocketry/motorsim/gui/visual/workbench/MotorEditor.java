@@ -285,7 +285,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
                     l.setAlignmentX(LEFT_ALIGNMENT);
                     p.add(l);
 
-                    p.add(new ClassChooser<>(grainTypes, gg) {
+                    p.add(new ClassChooser<Grain>(grainTypes, gg) {
                         private static final long serialVersionUID = 1L;
 
                         {
@@ -390,7 +390,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             l.setAlignmentX(LEFT_ALIGNMENT);
             nameAndFuel.add(l);
 
-            nameAndFuel.add(new JComboBox<>(availableFuels) {
+            nameAndFuel.add(new JComboBox<Fuel>(availableFuels) {
                 private static final long serialVersionUID = 1L;
 
                 {
@@ -412,7 +412,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             l.setAlignmentX(LEFT_ALIGNMENT);
             nameAndFuel.add(l);
 
-            nameAndFuel.add(new ClassChooser<>(chamberTypes, motor.getChamber()) {
+            nameAndFuel.add(new ClassChooser<Chamber>(chamberTypes, motor.getChamber()) {
                 private static final long serialVersionUID = 1L;
 
                 {

@@ -4,6 +4,7 @@ import com.billkuker.rocketry.motorsim.Fuel;
 import com.billkuker.rocketry.motorsim.Motor;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver.FuelNotFound;
+import com.billkuker.rocketry.motorsim.gui.visual.Editor;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -12,7 +13,8 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.jfree.util.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 import java.io.*;
@@ -20,7 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class MotorIO {
-
+    private static final Logger log = LogManager.getLogger(MotorIO.class);
     @SuppressWarnings("deprecation")
     private static XStream getXStream() {
         XStream xstream = new XStream();
@@ -113,7 +115,7 @@ public class MotorIO {
             try {
                 return FuelResolver.getFuel(new URI("motorsim:" + c.getSimpleName()));
             } catch (FuelNotFound | URISyntaxException e) {
-                Log.error(e);
+                log.error(e);
             }
             return null;
         }

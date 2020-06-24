@@ -13,6 +13,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListener, Validating {
@@ -104,7 +106,10 @@ public class MultiGrain implements Grain, Grain.Composite, PropertyChangeListene
     }
 
     public List<Grain> getGrains() {
-        return List.of(grain);
+
+        ArrayList<Grain> ret = new ArrayList<Grain>();
+        ret.add(grain);
+        return Collections.unmodifiableList(ret);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

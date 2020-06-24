@@ -180,7 +180,7 @@ public class Editor extends PropertySheetPanel {
     }
 
     public class EnumPropertyEditor<E extends Enum<E>> extends PropertyEditorSupport {
-        JComboBox<E> editor = new JComboBox<>() {
+        JComboBox<E> editor = new JComboBox<E>() {
             private static final long serialVersionUID = 1L;
 
             {
