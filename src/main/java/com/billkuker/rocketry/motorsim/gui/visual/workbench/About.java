@@ -1,5 +1,7 @@
 package com.billkuker.rocketry.motorsim.gui.visual.workbench;
 
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -23,15 +25,15 @@ public class About extends JDialog {
 
     private final JFrame f;
 
-    public About(final JFrame f) {
-        super(f, "About " + MotorWorkbench.name, true);
+    public About(final JFrame f) throws IOException, XmlPullParserException {
+        super(f, "About " + MotorWorkbench.getFullName(), true);
         this.f = f;
         setSize(400, 250);
 
         setIconImage(f.getIconImage());
 
         setLayout(new BorderLayout());
-        add(new JLabel("<html>" + MotorWorkbench.name
+        add(new JLabel("<html>" + MotorWorkbench.getFullName()
                 + " &copy;2010 Bill Kuker</html>"), BorderLayout.NORTH);
         JTextArea text;
         add(new JScrollPane(text = new JTextArea()), BorderLayout.CENTER);
@@ -40,6 +42,7 @@ public class About extends JDialog {
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             InputStream is = classloader.getResourceAsStream("license.txt");
+            assert is != null;
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = in.readLine()) != null) {
@@ -91,8 +94,14 @@ public class About extends JDialog {
         JFrame f = new JFrame();
         f.setSize(1024, 768);
         f.setVisible(true);
-        final About s = new About(f);
-        SwingUtilities.invokeLater(() -> s.setVisible(true));
+        About s = null;
+        try {
+            s = new About(f);
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        About finalS = s;
+        SwingUtilities.invokeLater(() -> finalS.setVisible(true));
 
     }
 

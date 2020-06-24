@@ -6,6 +6,9 @@ import com.billkuker.rocketry.motorsim.gui.fuel.FuelsEditor;
 import com.billkuker.rocketry.motorsim.gui.visual.RememberJFrame;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.LF5Appender;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,18 +17,35 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 
 public class MotorWorkbench extends RememberJFrame {
-    public static final String version = "2.0 BETA4";
-    public static final String name = "MotorSim " + version;
     private static final long serialVersionUID = 1L;
 
-    private final SettingsEditor settings = new SettingsEditor(this);
+    private SettingsEditor settings;
 
-    private final About about = new About(this);
+    {
+        try {
+            settings = new SettingsEditor(this);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private About about;
+
+    {
+        try {
+            about = new About(this);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
+
     private FuelsEditor fuelEditor;
     private final JFrame fuelEditorFrame = new RememberJFrame(800, 600) {
         private static final long serialVersionUID = 1L;
@@ -37,14 +57,22 @@ public class MotorWorkbench extends RememberJFrame {
             JMenuBar b;
             setJMenuBar(b = new JMenuBar());
             b.add(fuelEditor.getMenu());
-            setTitle(name + " - Fuel Editor");
+            try {
+                setTitle(getFullName() + " - Fuel Editor");
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            }
         }
     };
     private final MotorsEditor motorsEditor;
 
     public MotorWorkbench() throws IOException {
         super(1024, 768);
-        setTitle(name);
+        try {
+            setTitle(getFullName());
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
         setIconImage(getIcon());
 
         motorsEditor = new MotorsEditor(this);
@@ -94,6 +122,18 @@ public class MotorWorkbench extends RememberJFrame {
 
     }
 
+    public static String getVersion() throws IOException, XmlPullParserException {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream("pom.xml");
+        Model model = reader.read(is);
+        return model.getVersion();
+    }
+
+    public static String getFullName() throws IOException, XmlPullParserException {
+        return "MotorSim " + getVersion();
+    }
+
     public static Image getIcon() throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         return ImageIO.read(Objects.requireNonNull(classloader.getResource("icon.png")));
@@ -138,12 +178,7 @@ public class MotorWorkbench extends RememberJFrame {
                     private static final long serialVersionUID = 1L;
 
                     {
-                        addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                maybeQuit();
-                            }
-                        });
+                        addActionListener(e -> maybeQuit());
                     }
                 });
                 add(file);
@@ -161,18 +196,10 @@ public class MotorWorkbench extends RememberJFrame {
                         units.add(nonsci);
                         sci.setSelected(UnitPreference.getUnitPreference() == UnitPreference.SI);
                         nonsci.setSelected(UnitPreference.getUnitPreference() == UnitPreference.NONSI);
-                        sci.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent arg0) {
-                                UnitPreference
-                                        .setUnitPreference(UnitPreference.SI);
-                            }
-                        });
-                        nonsci.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent arg0) {
-                                UnitPreference
-                                        .setUnitPreference(UnitPreference.NONSI);
-                            }
-                        });
+                        sci.addActionListener(arg0 -> UnitPreference
+                                .setUnitPreference(UnitPreference.SI));
+                        nonsci.addActionListener(arg0 -> UnitPreference
+                                .setUnitPreference(UnitPreference.NONSI));
                         add(sci);
                         add(nonsci);
 
@@ -181,12 +208,7 @@ public class MotorWorkbench extends RememberJFrame {
                             private static final long serialVersionUID = 1L;
 
                             {
-                                addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        settings.setVisible(true);
-                                    }
-                                });
+                                addActionListener(e -> settings.setVisible(true));
                             }
                         });
                     }
@@ -211,12 +233,9 @@ public class MotorWorkbench extends RememberJFrame {
                             private static final long serialVersionUID = 1L;
 
                             {
-                                addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent arg0) {
-                                        fuelEditorFrame.setVisible(true);
-                                        fuelEditorFrame.toFront();
-                                    }
+                                addActionListener(arg0 -> {
+                                    fuelEditorFrame.setVisible(true);
+                                    fuelEditorFrame.toFront();
                                 });
                             }
                         });
@@ -230,12 +249,7 @@ public class MotorWorkbench extends RememberJFrame {
                             private static final long serialVersionUID = 1L;
 
                             {
-                                addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        about.setVisible(true);
-                                    }
-                                });
+                                addActionListener(e -> about.setVisible(true));
                             }
                         });
                         add(new JSeparator());
@@ -247,12 +261,7 @@ public class MotorWorkbench extends RememberJFrame {
                                     private static final long serialVersionUID = 1L;
 
                                     {
-                                        addActionListener(new ActionListener() {
-                                            @Override
-                                            public void actionPerformed(ActionEvent e) {
-                                                new DebugFrame();
-                                            }
-                                        });
+                                        addActionListener(e -> new DebugFrame());
                                     }
                                 });
                                 add(new JMenuItem("Log Window") {

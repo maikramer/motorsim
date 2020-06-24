@@ -1,6 +1,7 @@
 package com.billkuker.rocketry.motorsim;
 
 import com.billkuker.rocketry.motorsim.gui.visual.workbench.MotorWorkbench;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -52,6 +53,10 @@ class Splash extends JWindow {
     public void paint(Graphics g) {
         super.paint(g);
         g.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
-        g.drawString("Version " + MotorWorkbench.version, 140, 150);
+        try {
+            g.drawString("Version " + MotorWorkbench.getVersion(), 140, 150);
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+        }
     }
 }

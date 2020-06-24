@@ -2,17 +2,19 @@ package com.billkuker.rocketry.motorsim.gui.visual.workbench;
 
 import com.billkuker.rocketry.motorsim.Burn;
 import com.billkuker.rocketry.motorsim.gui.visual.Editor;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class SettingsEditor extends JDialog {
     private static final long serialVersionUID = 1L;
     private static final String MESSAGE = "These settings are not saved when you exit,\nand are probably not worth changing.";
     private final JFrame f;
 
-    public SettingsEditor(final JFrame f) {
-        super(f, MotorWorkbench.name + " - Simulation Settings", true);
+    public SettingsEditor(final JFrame f) throws IOException, XmlPullParserException {
+        super(f, MotorWorkbench.getFullName() + " - Simulation Settings", true);
         this.f = f;
         setSize(320, 240);
         setLayout(new BorderLayout());
@@ -23,19 +25,12 @@ public class SettingsEditor extends JDialog {
         setIconImage(f.getIconImage());
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, XmlPullParserException {
         JFrame f = new JFrame();
         f.setSize(1024, 768);
         f.setVisible(true);
         final SettingsEditor s = new SettingsEditor(f);
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                s.setVisible(true);
-
-            }
-        });
+        SwingUtilities.invokeLater(() -> s.setVisible(true));
 
     }
 

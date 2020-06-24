@@ -9,6 +9,7 @@ import com.billkuker.rocketry.motorsim.io.HTMLExporter;
 import com.billkuker.rocketry.motorsim.io.MotorIO;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +59,11 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        detached.setTitle(MotorWorkbench.name + " - All Motors");
+        try {
+            detached.setTitle(MotorWorkbench.getFullName() + " - All Motors");
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+        }
         detached.setContentPane(detachedTabs = new JTabbedPane());
 
         detached.addWindowListener(new WindowListener() {
