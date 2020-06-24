@@ -1,21 +1,18 @@
 package com.billkuker.rocketry.motorsim.gui.visual;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.logging.Logger;
 
 
 public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extends JTabbedPane {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Logger log = LogManager.getLogger(MultiObjectEditor.class);
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     protected final Frame frame;
     private final String noun;
     private final List<ObjectCreator> creators = new Vector<>();
@@ -110,12 +107,12 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         if (e == null)
             return;
         if (!editorToFile.containsKey(e)) {
-            log.debug("Editor has no file, saving as...");
+            LOGGER.info("Editor has no file, saving as...");
             saveAsDialog();
             return;
         }
         File file = editorToFile.get(e);
-        log.debug("Saving to " + file.getAbsolutePath());
+        LOGGER.info("Saving to " + file.getAbsolutePath());
         try {
             saveToFile(editorToObject.get(e), file);
             undirty(editorToObject.get(e));
@@ -154,9 +151,9 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         fd.setVisible(true);
         if (fd.getFile() != null) {
             File file = new File(fd.getDirectory() + fd.getFile());
-            log.debug("Opening File " + file.getAbsolutePath());
+            LOGGER.info("Opening File " + file.getAbsolutePath());
             if (fileToEditor.containsKey(file)) {
-                log.debug("File " + file.getAbsolutePath() + "Already open, focusing");
+                LOGGER.info("File " + file.getAbsolutePath() + "Already open, focusing");
                 setSelectedComponent(fileToEditor.get(file));
                 return;
             }
@@ -178,7 +175,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
                 {
                     addActionListener(ae -> {
-                        log.debug("New");
+                        LOGGER.info("New");
                         menuNew(c);
                     });
                 }
@@ -194,7 +191,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
                             {
                                 addActionListener(ae -> {
-                                    log.debug("New");
+                                    LOGGER.info("New");
                                     menuNew(c);
                                 });
                             }
@@ -208,7 +205,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
             {
                 addActionListener(ae -> {
-                    log.debug("Open...");
+                    LOGGER.info("Open...");
                     openDialog();
                 });
             }
@@ -218,7 +215,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
             {
                 addActionListener(ae -> {
-                    log.debug("Close");
+                    LOGGER.info("Close");
                     close();
                 });
             }
@@ -229,7 +226,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
             {
                 addActionListener(ae -> {
-                    log.debug("Save");
+                    LOGGER.info("Save");
                     saveDialog();
                 });
             }
@@ -239,7 +236,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
             {
                 addActionListener(ae -> {
-                    log.debug("Save As...");
+                    LOGGER.info("Save As...");
                     saveAsDialog();
                 });
             }

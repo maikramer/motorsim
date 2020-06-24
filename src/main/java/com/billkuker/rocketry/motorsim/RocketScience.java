@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -20,10 +21,10 @@ import java.util.prefs.Preferences;
 public class RocketScience {
     private static final Logger log = LogManager.getLogger(RocketScience.class);
 
-    public static Unit<Pressure> PSI = new ProductUnit<Pressure>(NonSI.POUND_FORCE.divide(NonSI.INCH.pow(2)));
-    public static Unit<Impulse> NEWTON_SECOND = new ProductUnit<Impulse>(SI.NEWTON.times(SI.SECOND));
-    public static Unit<Impulse> POUND_SECOND = new ProductUnit<Impulse>(NonSI.POUND_FORCE.times(SI.SECOND));
-    private static final HashSet<WeakReference<UnitPreferenceListener>> prefListeners = new HashSet<WeakReference<UnitPreferenceListener>>();
+    public static Unit<Pressure> PSI = new ProductUnit<>(NonSI.POUND_FORCE.divide(NonSI.INCH.pow(2)));
+    public static Unit<Impulse> NEWTON_SECOND = new ProductUnit<>(SI.NEWTON.times(SI.SECOND));
+    public static Unit<Impulse> POUND_SECOND = new ProductUnit<>(NonSI.POUND_FORCE.times(SI.SECOND));
+    private static final HashSet<WeakReference<UnitPreferenceListener>> prefListeners = new HashSet<>();
 
     static {
         UnitFormat.getInstance().label(PSI, "psi");
@@ -31,7 +32,7 @@ public class RocketScience {
     }
 
     public static void addUnitPreferenceListener(UnitPreferenceListener l) {
-        prefListeners.add(new WeakReference<RocketScience.UnitPreferenceListener>(l));
+        prefListeners.add(new WeakReference<>(l));
     }
 
     public static <T extends Quantity> String ammountToString(Amount<T> a) {
@@ -94,7 +95,7 @@ public class RocketScience {
                 POUND_SECOND
         });
 
-        private static UnitPreference preference = SI;
+        private static UnitPreference preference;
 
         static {
             Preferences prefs = Preferences.userNodeForPackage(RocketScience.class);
@@ -102,11 +103,10 @@ public class RocketScience {
             preference = UnitPreference.valueOf(p);
         }
 
-        protected Set<Unit<?>> units = new HashSet<Unit<?>>();
+        protected Set<Unit<?>> units = new HashSet<>();
 
         UnitPreference(Unit<?>[] u) {
-            for (Unit<?> uu : u)
-                units.add(uu);
+            Collections.addAll(units, u);
         }
 
         public static UnitPreference getUnitPreference() {
@@ -160,13 +160,9 @@ public class RocketScience {
                         return (Unit<T>) f.get(null);
                     }
                 }
-            } catch (SecurityException e) {
+            } catch (SecurityException | NoSuchFieldException e) {
                 e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                log.error(e);
-            } catch (IllegalAccessException e) {
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 log.error(e);
             }
             return null;
@@ -174,7 +170,7 @@ public class RocketScience {
     }
 
     public interface MolarWeight extends Quantity {
-        Unit<MolarWeight> UNIT = new ProductUnit<MolarWeight>(
+        Unit<MolarWeight> UNIT = new ProductUnit<>(
                 SI.KILOGRAM.divide(SI.MOLE));
     }
 
