@@ -36,12 +36,12 @@ public class ENGExporter {
 
         NumberFormat nf = new DecimalFormat("0.####", new DecimalFormatSymbols(Locale.US));
 
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
 
         out.append(";Output from Motorsim, motorsim@billkuker.com\n");
         out.append(";You must fill in Delays and Total Weight\n");
         out.append(";Name Diameter Length Delays ProWt Wt Manufacturer\n");
-        out.append(b.getMotor().getName().replace(" ", "-") + " ");
+        out.append(b.getMotor().getName().replace(" ", "-")).append(" ");
 
         double dia = cha.getOD().doubleValue(SI.MILLIMETER);
         double len = cha.getLength().doubleValue(SI.MILLIMETER);
@@ -56,12 +56,11 @@ public class ENGExporter {
         double delay = b.getMotor().getEjectionDelay().doubleValue(SI.SECOND);
         String delayString = Integer.toString((int) delay);
 
-        out.append(nf.format(dia) + " " + nf.format(len) + " " + delayString + "-0-0 "
-                + nf.format(wt) + " " + nf.format(wt + 0.1) + " MF\n");
+        out.append(nf.format(dia)).append(" ").append(nf.format(len)).append(" ").append(delayString).append("-0-0 ").append(nf.format(wt)).append(" ").append(nf.format(wt + 0.1)).append(" MF\n");
 
-        GraphSimplifier<Duration, Force> gs = null;
+        GraphSimplifier<Duration, Force> gs;
         try {
-            gs = new GraphSimplifier<Duration, Force>(b, "thrust", b.getData()
+            gs = new GraphSimplifier<>(b, "thrust", b.getData()
                     .keySet().iterator());
         } catch (Exception e) {
             e.printStackTrace();

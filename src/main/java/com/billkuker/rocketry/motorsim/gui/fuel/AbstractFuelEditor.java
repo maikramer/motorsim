@@ -14,7 +14,6 @@ import java.awt.*;
 public abstract class AbstractFuelEditor extends JSplitPane {
     private static final long serialVersionUID = 1L;
 
-    private final JSplitPane editParent;
     private final JSplitPane editTop;
     private final Fuel f;
     private Chart<Pressure, Velocity> burnRate;
@@ -27,7 +26,7 @@ public abstract class AbstractFuelEditor extends JSplitPane {
         editTop.setTopComponent(new Editor(f));
         editTop.setBottomComponent(new Editor(f.getCombustionProduct()));
 
-        editParent = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        JSplitPane editParent = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         setLeftComponent(editParent);
         editParent.setTopComponent(editTop);
         editParent.setBottomComponent(getBurnrateEditComponent());
@@ -50,27 +49,23 @@ public abstract class AbstractFuelEditor extends JSplitPane {
 
 
     protected void update() {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                editTop.setTopComponent(new Editor(f));
-                editTop.setBottomComponent(new Editor(f.getCombustionProduct()));
-                if (burnRate != null)
-                    AbstractFuelEditor.this.remove(burnRate);
-                try {
-                    burnRate = new Chart<Pressure, Velocity>(
-                            SI.MEGA(SI.PASCAL), SI.MILLIMETER.divide(SI.SECOND)
-                            .asType(Velocity.class), f, "burnRate", "Chamber Pressure", "Burn Rate");
-                } catch (NoSuchMethodException e) {
-                    throw new Error(e);
-                }
-                burnRate.setDomain(burnRate.new IntervalDomain(Amount.valueOf(
-                        0, SI.MEGA(SI.PASCAL)), Amount.valueOf(11, SI
-                        .MEGA(SI.PASCAL)), 50));
-                AbstractFuelEditor.this.setRightComponent(burnRate);
-                AbstractFuelEditor.this.revalidate();
+        SwingUtilities.invokeLater(() -> {
+            editTop.setTopComponent(new Editor(f));
+            editTop.setBottomComponent(new Editor(f.getCombustionProduct()));
+            if (burnRate != null)
+                AbstractFuelEditor.this.remove(burnRate);
+            try {
+                burnRate = new Chart<>(
+                        SI.MEGA(SI.PASCAL), SI.MILLIMETER.divide(SI.SECOND)
+                        .asType(Velocity.class), f, "burnRate", "Chamber Pressure", "Burn Rate");
+            } catch (NoSuchMethodException e) {
+                throw new Error(e);
             }
+            burnRate.setDomain(burnRate.new IntervalDomain(Amount.valueOf(
+                    0, SI.MEGA(SI.PASCAL)), Amount.valueOf(11, SI
+                    .MEGA(SI.PASCAL)), 50));
+            AbstractFuelEditor.this.setRightComponent(burnRate);
+            AbstractFuelEditor.this.revalidate();
         });
     }
 

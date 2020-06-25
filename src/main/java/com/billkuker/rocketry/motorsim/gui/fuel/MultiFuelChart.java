@@ -2,7 +2,6 @@ package com.billkuker.rocketry.motorsim.gui.fuel;
 
 import com.billkuker.rocketry.motorsim.Fuel;
 import com.billkuker.rocketry.motorsim.RocketScience;
-import com.billkuker.rocketry.motorsim.RocketScience.UnitPreferenceListener;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -18,7 +17,6 @@ import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,25 +26,17 @@ public class MultiFuelChart extends JPanel implements FuelResolver.FuelsChangeLi
 
     private final XYSeriesCollection dataset = new XYSeriesCollection();
 
-    private final HashMap<Fuel, XYSeries> fuelToSeries = new HashMap<Fuel, XYSeries>();
+    private final HashMap<Fuel, XYSeries> fuelToSeries = new HashMap<>();
+    private final HashSet<Fuel> editFuels = new HashSet<>();
     private Unit<Pressure> pressureUnit;
     private Unit<Velocity> rateUnit;
-    private final HashSet<Fuel> editFuels = new HashSet<Fuel>();
 
     public MultiFuelChart() {
         this.setLayout(new BorderLayout());
-        RocketScience.addUnitPreferenceListener(new UnitPreferenceListener() {
-            @Override
-            public void preferredUnitsChanged() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        setup();
-                        revalidate();
-                    }
-                });
-            }
-        });
+        RocketScience.addUnitPreferenceListener(() -> SwingUtilities.invokeLater(() -> {
+            setup();
+            revalidate();
+        }));
         setup();
         FuelResolver.addFuelsChangeListener(this);
     }
@@ -78,12 +68,9 @@ public class MultiFuelChart extends JPanel implements FuelResolver.FuelsChangeLi
         XYSeries s = createSeries(f);
         fuelToSeries.put(f, s);
         dataset.addSeries(s);
-        f.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                removeFuel(f);
-                addFuel(f, keep);
-            }
+        f.addPropertyChangeListener((PropertyChangeListener) evt -> {
+            removeFuel(f);
+            addFuel(f, keep);
         });
     }
 

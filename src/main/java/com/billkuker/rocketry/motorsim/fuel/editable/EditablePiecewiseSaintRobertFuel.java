@@ -21,6 +21,7 @@ public class EditablePiecewiseSaintRobertFuel extends PiecewiseSaintRobertFuel i
     private String name = "New Fuel";
     private Map<Amount<Pressure>, Double> aMap;
     private Map<Amount<Pressure>, Double> nMap;
+
     public EditablePiecewiseSaintRobertFuel() {
         super(Type.SI);
         clear();

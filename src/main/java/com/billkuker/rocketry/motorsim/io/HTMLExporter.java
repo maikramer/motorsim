@@ -30,27 +30,27 @@ public class HTMLExporter {
     }
 
     private static <X extends Quantity, Y extends Quantity> String toChart(
-            final Unit<X> xUnit, final Unit<Y> yUnit, final Object source,
-            final String method, final Iterator<Amount<X>> domain, String title)
+            final GraphSimplifier<Duration, Force> source,
+            final Iterator<Amount<X>> domain)
             throws SecurityException, NoSuchMethodException,
             IllegalArgumentException, IllegalAccessException,
             InvocationTargetException {
         NumberFormat nf = new DecimalFormat("#.##");
-        Method f = source.getClass().getMethod(method, Amount.class);
+        Method f = source.getClass().getMethod("value", Amount.class);
 
         double xMin = 0, xMax = 0;
         double yMin = 0, yMax = 0;
 
-        StringBuffer xVals = new StringBuffer();
-        StringBuffer yVals = new StringBuffer();
+        StringBuilder xVals = new StringBuilder();
+        StringBuilder yVals = new StringBuilder();
 
         while (domain.hasNext()) {
             Amount<X> aX = domain.next();
-            double x = aX.doubleValue(xUnit);
+            double x = aX.doubleValue((Unit<X>) SI.SECOND);
             @SuppressWarnings("unchecked")
-            double y = ((Amount<Y>) f.invoke(source, aX)).doubleValue(yUnit);
-            xMin = x < xMin ? x : xMin;
-            xMax = x > xMax ? x : xMax;
+            double y = ((Amount<Y>) f.invoke(source, aX)).doubleValue((Unit<Y>) SI.NEWTON);
+            xMin = Math.min(x, xMin);
+            xMax = Math.max(x, xMax);
             yMin = y < yMin ? y : yMin;
             yMax = y > yMax ? y : yMax;
 
@@ -64,41 +64,36 @@ public class HTMLExporter {
 
         // Get the non-preferred Y Unit
         Unit<Y> yUnit2 = RocketScience.UnitPreference.SI
-                .getPreferredUnit(yUnit);
+                .getPreferredUnit((Unit<Y>) SI.NEWTON);
         // if ( yUnit2.equals(yUnit) )
-        yUnit2 = RocketScience.UnitPreference.NONSI.getPreferredUnit(yUnit);
+        yUnit2 = RocketScience.UnitPreference.NONSI.getPreferredUnit((Unit<Y>) SI.NEWTON);
         double y2Min, y2Max;
-        y2Min = Amount.valueOf(yMin, yUnit).doubleValue(yUnit2);
-        y2Max = Amount.valueOf(yMax, yUnit).doubleValue(yUnit2);
+        y2Min = Amount.valueOf(yMin, (Unit<Y>) SI.NEWTON).doubleValue(yUnit2);
+        y2Max = Amount.valueOf(yMax, (Unit<Y>) SI.NEWTON).doubleValue(yUnit2);
 
         // Get the non-preferred X Unit
         Unit<X> xUnit2 = RocketScience.UnitPreference.SI
-                .getPreferredUnit(xUnit);
+                .getPreferredUnit((Unit<X>) SI.SECOND);
         // if ( xUnit2.equals(xUnit) )
-        xUnit2 = RocketScience.UnitPreference.NONSI.getPreferredUnit(xUnit);
+        xUnit2 = RocketScience.UnitPreference.NONSI.getPreferredUnit((Unit<X>) SI.SECOND);
         double x2Min, x2Max;
-        x2Min = Amount.valueOf(xMin, xUnit).doubleValue(xUnit2);
-        x2Max = Amount.valueOf(xMax, xUnit).doubleValue(xUnit2);
+        x2Min = Amount.valueOf(xMin, (Unit<X>) SI.SECOND).doubleValue(xUnit2);
+        x2Max = Amount.valueOf(xMax, (Unit<X>) SI.SECOND).doubleValue(xUnit2);
 
-        boolean x2 = !xUnit.equals(xUnit2);
-        boolean y2 = x2 || !yUnit.equals(yUnit2);
+        boolean x2 = !((Unit<X>) SI.SECOND).equals(xUnit2);
+        boolean y2 = x2 || !((Unit<Y>) SI.NEWTON).equals(yUnit2);
 
         StringBuffer sb = new StringBuffer();
         sb.append("<img src='");
-        sb.append("http://chart.apis.google.com/chart?chxt=x,x,y,y"
-                + (y2 ? ",r,r" : "") + (x2 ? ",t,t" : "")
-                + "&chs=" + WIDTH + "x" + HEIGHT + "&cht=lxy&chco=3072F3");
-        sb.append("&chds=" + nf.format(xMin) + "," + nf.format(xMax) + ","
-                + nf.format(yMin) + "," + nf.format(yMax));
-        sb.append("&chxr=" + "0," + nf.format(xMin) + "," + nf.format(xMax)
-                + "|2," + nf.format(yMin) + "," + nf.format(yMax));
+        sb.append("http://chart.apis.google.com/chart?chxt=x,x,y,y").append(y2 ? ",r,r" : "").append(x2 ? ",t,t" : "").append("&chs=").append(WIDTH).append("x").append(HEIGHT).append("&cht=lxy&chco=3072F3");
+        sb.append("&chds=").append(nf.format(xMin)).append(",").append(nf.format(xMax)).append(",").append(nf.format(yMin)).append(",").append(nf.format(yMax));
+        sb.append("&chxr=" + "0,").append(nf.format(xMin)).append(",").append(nf.format(xMax)).append("|2,").append(nf.format(yMin)).append(",").append(nf.format(yMax));
         if (y2)
-            sb.append("|4," + nf.format(y2Min) + "," + nf.format(y2Max));
+            sb.append("|4,").append(nf.format(y2Min)).append(",").append(nf.format(y2Max));
         if (x2)
-            sb.append("|6," + nf.format(x2Min) + "," + nf.format(x2Max));
-        sb.append("&chd=t:" + xVals.toString() + "|" + yVals.toString());
-        sb.append("&chxl=1:|" + encode(xUnit.toString()) + "|3:|"
-                + encode(yUnit.toString()));
+            sb.append("|6,").append(nf.format(x2Min)).append(",").append(nf.format(x2Max));
+        sb.append("&chd=t:").append(xVals.toString()).append("|").append(yVals.toString());
+        sb.append("&chxl=1:|").append(encode(SI.SECOND.toString())).append("|3:|").append(encode(SI.NEWTON.toString()));
         if (y2)
             sb.append("|5:|" + encode(yUnit2.toString()));
         if (x2)
@@ -108,9 +103,7 @@ public class HTMLExporter {
             sb.append("|5,50");
         if (x2)
             sb.append("|7,50");
-        if (title != null)
-            sb.append("&chtt=" + title);
-        sb.append("' width='" + WIDTH + "' height='" + HEIGHT + "' alt='" + title + "' />");
+        sb.append("' width='" + WIDTH + "' height='" + HEIGHT + "' alt='" + null + "' />");
 
         return sb.toString();
     }
@@ -187,8 +180,8 @@ public class HTMLExporter {
         GraphSimplifier<Duration, Force> thrust = new GraphSimplifier<Duration, Force>(
                 b, "thrust", b.getData().keySet().iterator());
 
-        out.print(toChart(SI.SECOND, SI.NEWTON, thrust, "value", thrust
-                .getDomain().iterator(), null));
+        out.print(toChart(thrust, thrust
+                .getDomain().iterator()));
         out.print("</td>");
 		/*
 		out.print("<td colspan='3' class='pressure'>");

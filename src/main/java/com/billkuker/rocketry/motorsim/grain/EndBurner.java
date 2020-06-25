@@ -44,13 +44,13 @@ public class EndBurner extends RotatedShapeGrain implements Validating {
     @Override
     public void validate() throws ValidationException {
         if (oD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid oD");
+            throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid Length");
+            throw new ValidationException("Invalid Length");
         if (puntDiameter.isGreaterThan(oD))
-            throw new ValidationException(this, "puntDiameter > oD");
+            throw new ValidationException("puntDiameter > oD");
         if (puntDepth.isGreaterThan(length))
-            throw new ValidationException(this, "puntDepth > length");
+            throw new ValidationException("puntDepth > length");
     }
 
     public Amount<Length> getLength() {

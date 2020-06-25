@@ -10,8 +10,8 @@ import java.util.*;
 public class GraphSimplifier<X extends Quantity, Y extends Quantity> {
     private static final int CHOOSE = 10;
     private static final int EVEN = 10;
+    private final SortedMap<Amount<X>, Amount<Y>> out = new TreeMap<>();
     Method f;
-    private final SortedMap<Amount<X>, Amount<Y>> out = new TreeMap<Amount<X>, Amount<Y>>();
 
     public GraphSimplifier(Object source, String method,
                            Iterator<Amount<X>> domain) throws NoSuchMethodException,
@@ -19,7 +19,7 @@ public class GraphSimplifier<X extends Quantity, Y extends Quantity> {
             InvocationTargetException {
         f = source.getClass().getMethod(method, Amount.class);
 
-        Vector<Entry> oldEntries = new Vector<Entry>();
+        Vector<Entry> oldEntries = new Vector<>();
         Entry max = null;
         while (domain.hasNext()) {
             Amount<X> x = domain.next();
@@ -33,8 +33,8 @@ public class GraphSimplifier<X extends Quantity, Y extends Quantity> {
                 max = e;
         }
 
-        List<DDEntry> byDD = new Vector<DDEntry>();
-        Map<Amount<X>, Amount<Y>> byX = new HashMap<Amount<X>, Amount<Y>>();
+        List<DDEntry> byDD = new Vector<>();
+        Map<Amount<X>, Amount<Y>> byX = new HashMap<>();
 
         for (int i = 1; i < oldEntries.size() - 1; i++) {
             Entry low = oldEntries.elementAt(i - 1);
@@ -47,8 +47,7 @@ public class GraphSimplifier<X extends Quantity, Y extends Quantity> {
                 out.put(middle.x, middle.y);
             }
 
-            @SuppressWarnings("rawtypes")
-            Amount d1, d2, dd;
+            Amount<?> d1, d2, dd;
 
             d1 = middle.y.minus(low.y).divide(middle.x.minus(low.x));
             d2 = high.y.minus(middle.y).divide(high.x.minus(middle.x));
@@ -71,6 +70,7 @@ public class GraphSimplifier<X extends Quantity, Y extends Quantity> {
 
         //always include the first, MAX and last
         out.put(oldEntries.elementAt(0).x, oldEntries.elementAt(0).y);
+        assert max != null;
         out.put(max.x, max.y);
         int last = oldEntries.size() - 1;
         out.put(oldEntries.elementAt(last).x, oldEntries.elementAt(last).y);

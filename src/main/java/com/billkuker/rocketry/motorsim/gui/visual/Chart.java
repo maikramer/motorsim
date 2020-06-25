@@ -16,6 +16,7 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jscience.physics.amount.Amount;
+
 import javax.measure.quantity.Area;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Quantity;
@@ -172,27 +173,24 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
     }
 
     public void addDomainMarker(Amount<X> x, String label, Color c) {
-        double xVal = x.doubleValue(xUnit);
-        Marker marker = new ValueMarker(xVal);
-        marker.setStroke(dashed);
-        marker.setPaint(c);
-        marker.setLabelPaint(c);
-        marker.setLabelFont(labelFont);
-        marker.setLabel(label + ": " + RocketScience.ammountToRoundedString(x));
-        marker.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+        Marker marker = setValues(label, c, x.doubleValue(xUnit), RocketScience.ammountToRoundedString(x));
         marker.setLabelOffset(new RectangleInsets(0, -5, 0, 0));
         chart.getXYPlot().addDomainMarker(marker);
     }
 
-    public void addRangeMarker(Amount<Y> y, String label, Color c) {
-        double yVal = y.doubleValue(yUnit);
-        Marker marker = new ValueMarker(yVal);
+    private Marker setValues(String label, Color c, double v, String s) {
+        Marker marker = new ValueMarker(v);
         marker.setStroke(dashed);
         marker.setPaint(c);
         marker.setLabelPaint(c);
         marker.setLabelFont(labelFont);
-        marker.setLabel(label + ": " + RocketScience.ammountToRoundedString(y));
+        marker.setLabel(label + ": " + s);
         marker.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+        return marker;
+    }
+
+    public void addRangeMarker(Amount<Y> y, String label, Color c) {
+        Marker marker = setValues(label, c, y.doubleValue(yUnit), RocketScience.ammountToRoundedString(y));
         marker.setLabelOffset(new RectangleInsets(0, 5, 0, 0));
         chart.getXYPlot().addRangeMarker(marker);
     }

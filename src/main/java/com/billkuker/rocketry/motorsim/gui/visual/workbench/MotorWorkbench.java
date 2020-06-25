@@ -24,27 +24,9 @@ import java.util.Objects;
 
 public class MotorWorkbench extends RememberJFrame {
     private static final long serialVersionUID = 1L;
-
+    private final MotorsEditor motorsEditor;
     private SettingsEditor settings;
-
-    {
-        try {
-            settings = new SettingsEditor(this);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
-    }
-
     private About about;
-
-    {
-        try {
-            about = new About(this);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
-    }
-
     private FuelsEditor fuelEditor;
     private final JFrame fuelEditorFrame = new RememberJFrame(800, 600) {
         private static final long serialVersionUID = 1L;
@@ -63,7 +45,22 @@ public class MotorWorkbench extends RememberJFrame {
             }
         }
     };
-    private final MotorsEditor motorsEditor;
+
+    {
+        try {
+            settings = new SettingsEditor(this);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    {
+        try {
+            about = new About(this);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MotorWorkbench() throws IOException {
         super(1024, 768);
@@ -263,12 +260,13 @@ public class MotorWorkbench extends RememberJFrame {
                                         addActionListener(e -> new DebugFrame());
                                     }
                                 });
-                                try{
+                                try {
                                     //noinspection unused
                                     Class<?> test = Class.forName("LF5Appender");
                                     add(new JMenuItem("Log Window") {
                                         LF5Appender lf5;
                                         private static final long serialVersionUID = 1L;
+
                                         {
                                             addActionListener(e -> {
 
@@ -280,7 +278,7 @@ public class MotorWorkbench extends RememberJFrame {
                                             });
                                         }
                                     });
-                                } catch (ClassNotFoundException ignored){
+                                } catch (ClassNotFoundException ignored) {
                                 }
 
                             }

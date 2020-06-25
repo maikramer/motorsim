@@ -13,11 +13,11 @@ import com.billkuker.rocketry.motorsim.Grain;
 import com.billkuker.rocketry.motorsim.Chamber;
 import com.billkuker.rocketry.motorsim.Nozzle;
 import com.billkuker.rocketry.motorsim.Fuel;
-import com.billkuker.rocketry.motorsim.Burn;
+import com.billkuker.rocketry.motorsim.Burn.BurnSettings;
 
 public aspect ChangeListening {
 
-	private static final Logger log = LogManager.getLogger(ChangeListening.class);
+	private static final Logger log = LogManager.getLogger(Subject.class);
 	public interface Subject {
 		// public void addPropertyChangeListener(PropertyChangeListener l);
 	};
@@ -25,6 +25,7 @@ public aspect ChangeListening {
 	private PropertyChangeSupport Subject.pcs;
 
 	public void Subject.addPropertyChangeListener(PropertyChangeListener l) {
+		if(pcs == null) pcs = new PropertyChangeSupport(Subject.class);
 		pcs.addPropertyChangeListener(l);
 	}
 	
@@ -36,7 +37,7 @@ public aspect ChangeListening {
 		pcs.firePropertyChange(e);
 	}
 
-	declare parents: Motor || Grain || Chamber || Nozzle || Fuel || Burn.BurnSettings implements Subject;
+	declare parents: Motor || Grain || Chamber || Nozzle || Fuel || BurnSettings implements Subject;
 
 	void around(Subject s, Object newVal):
 	        execution(void Subject+.set*(..)) && target(s) && args(newVal) {

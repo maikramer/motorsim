@@ -12,7 +12,7 @@ import java.util.TreeMap;
 public abstract class PiecewiseSaintRobertFuel extends SaintRobertFuel {
 
     private static final Logger log = LogManager.getLogger(PiecewiseSaintRobertFuel.class);
-    private final SortedMap<Amount<Pressure>, Entry> entries = new TreeMap<Amount<Pressure>, Entry>();
+    private final SortedMap<Amount<Pressure>, Entry> entries = new TreeMap<>();
 
     protected PiecewiseSaintRobertFuel(Type t) {
         super(t);

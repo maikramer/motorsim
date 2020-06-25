@@ -16,7 +16,7 @@ public class FuelPanel extends JSplitPane {
         setName("Fuel");
         Chart<Pressure, Velocity> burnRate;
         try {
-            burnRate = new Chart<Pressure, Velocity>(SI.MEGA(SI.PASCAL),
+            burnRate = new Chart<>(SI.MEGA(SI.PASCAL),
                     SI.METERS_PER_SECOND, f, "burnRate", "Chamber Pressure", "Burn Rate");
         } catch (NoSuchMethodException e) {
             throw new Error(e);
@@ -30,7 +30,7 @@ public class FuelPanel extends JSplitPane {
         p.add(new Editor(f));
         try {
             p.add(new Editor(f.getCombustionProduct()));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 

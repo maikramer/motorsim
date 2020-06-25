@@ -13,9 +13,12 @@ public class Motor implements Validating {
     private String name;
     private Amount<Duration> ejectionDelay = Amount.valueOf(5, SI.SECOND);
 
+    public Motor() {
+    }
+
     public void validate() throws ValidationException {
         if (chamber.chamberVolume().isLessThan(grain.volume(Amount.valueOf(0, SI.MILLIMETER)))) {
-            throw new ValidationException(this, "Fuel does not fit in chamber");
+            throw new ValidationException("Fuel does not fit in chamber");
         }
         if (chamber instanceof Validating)
             ((Validating) chamber).validate();

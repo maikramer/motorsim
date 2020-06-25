@@ -7,6 +7,7 @@ import javax.measure.quantity.Volume;
 import java.awt.*;
 
 public interface Chamber {
+
     Amount<Volume> chamberVolume();
 
     Amount<Pressure> getBurstPressure();

@@ -18,33 +18,33 @@ import java.text.NumberFormat;
 
 public class BurnPanel extends JPanel {
     private static final long serialVersionUID = 1L;
+    private final Burn burn;
     Chart<Duration, Pressure> pressure;
     Chart<Duration, Force> thrust;
     Chart<Pressure, Velocity> burnRate;
     GrainPanel grain;
     Amount<Duration> displayedTime = Amount.valueOf(0, SI.SECOND);
-    private final Burn burn;
 
     public BurnPanel(Burn b) {
         super(new BorderLayout());
         burn = b;
 
         try {
-            pressure = new Chart<Duration, Pressure>(
+            pressure = new Chart<>(
                     SI.SECOND,
                     SI.MEGA(SI.PASCAL),
                     b,
                     "pressure", "Time", "Chamber Pressure");
             pressure.setDomain(burn.getData().keySet());
 
-            thrust = new Chart<Duration, Force>(
+            thrust = new Chart<>(
                     SI.SECOND,
                     SI.NEWTON,
                     b,
                     "thrust", "Time", "Thrust");
             thrust.setDomain(burn.getData().keySet());
 
-            burnRate = new Chart<Pressure, Velocity>(
+            burnRate = new Chart<>(
                     SI.MEGA(SI.PASCAL),
                     SI.METERS_PER_SECOND,
                     burn.getMotor().getFuel(),
@@ -71,7 +71,7 @@ public class BurnPanel extends JPanel {
                     h.resetToPreferredSizes();
                 }
 
-			};
+            };
 
             JSplitPane grains = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, grain, burnRate);
             grains.setDividerLocation(.5);

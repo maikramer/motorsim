@@ -9,6 +9,7 @@ import javax.measure.quantity.Volume;
 import javax.measure.unit.SI;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -21,8 +22,7 @@ public class GrainSet implements Grain, Grain.Composite {
     private final Amount<Length> delay = Amount.valueOf(0, SI.MILLIMETER);
 
     public GrainSet(Grain... gs) {
-        for (Grain g : gs)
-            grains.add(g);
+        grains.addAll(Arrays.asList(gs));
     }
 
     private Amount<Length> getAdjustedRegression(Amount<Length> regression, int grain) {

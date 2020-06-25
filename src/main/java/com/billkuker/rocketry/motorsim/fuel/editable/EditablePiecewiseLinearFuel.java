@@ -27,6 +27,7 @@ public class EditablePiecewiseLinearFuel implements EditableFuel {
     private Amount<VolumetricDensity> density = Amount.valueOf(1889, 0, SI.KILOGRAM.divide(SI.METER.pow(3))).to(VolumetricDensity.UNIT);
     private EditableCombustionProduct product = new EditableCombustionProduct();
     private SortedMap<Amount<Pressure>, Entry> entries;
+
     public EditablePiecewiseLinearFuel() {
         clear();
     }

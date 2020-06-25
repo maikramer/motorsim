@@ -7,7 +7,7 @@ public interface Validating {
     class ValidationException extends Exception {
         private static final long serialVersionUID = 1L;
 
-        public ValidationException(Validating part, String error) {
+        public ValidationException(String error) {
             super(error);
         }
     }

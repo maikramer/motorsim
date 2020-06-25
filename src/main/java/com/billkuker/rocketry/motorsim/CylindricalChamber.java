@@ -11,10 +11,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 public class CylindricalChamber implements Chamber, ICylindricalChamber {
-
     private Amount<Length> length = Amount.valueOf(200, SI.MILLIMETER);
     private Amount<Length> oD = Amount.valueOf(31, SI.MILLIMETER);
     private Amount<Length> iD = Amount.valueOf(30, SI.MILLIMETER);
+    public CylindricalChamber() {
+    }
 
     public Amount<Pressure> getBurstPressure() {
         return null;

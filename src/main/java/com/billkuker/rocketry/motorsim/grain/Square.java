@@ -45,7 +45,7 @@ public class Square extends ExtrudedShapeGrain implements Validating {
         return oD;
     }
 
-    public void setOD(Amount<Length> od) throws PropertyVetoException {
+    public void setOD(Amount<Length> od) {
         if (od.equals(this.oD))
             return;
         this.oD = od;
@@ -67,10 +67,10 @@ public class Square extends ExtrudedShapeGrain implements Validating {
     @Override
     public void validate() throws ValidationException {
         if (side.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid side");
+            throw new ValidationException("Invalid side");
         if (oD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid oD");
+            throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid Length");
+            throw new ValidationException("Invalid Length");
     }
 }

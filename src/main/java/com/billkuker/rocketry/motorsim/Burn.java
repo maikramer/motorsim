@@ -15,10 +15,10 @@ public class Burn {
     private static final BurnSettings settings = new BurnSettings();
     private static final Logger log = LogManager.getLogger(Burn.class);
     protected final Motor motor;
-    protected SortedMap<Amount<Duration>, Interval> data = new TreeMap<Amount<Duration>, Interval>();
+    private final Set<BurnProgressListener> bpls = new HashSet<>();
+    protected SortedMap<Amount<Duration>, Interval> data = new TreeMap<>();
     private boolean burning = false;
     private boolean done = false;
-    private final Set<BurnProgressListener> bpls = new HashSet<Burn.BurnProgressListener>();
 
     public Burn(Motor m) {
         try {
@@ -29,7 +29,7 @@ public class Burn {
         motor = m;
     }
 
-    public static final BurnSettings getBurnSettings() {
+    public static BurnSettings getBurnSettings() {
         return settings;
     }
 
@@ -169,7 +169,7 @@ public class Burn {
             if (!positive(next.chamberProduct)) {
                 log.warn("ChamberProduct Negative on step " + i + "!, Adjusting regstep down and repeating step!");
                 regStep = regStep.times(settings.getRegStepDecreaseFactor());
-                continue step;
+                continue;
             }
             assert (positive(next.chamberProduct));
             if (next.chamberProduct.isLessThan(Amount.valueOf(0, SI.KILOGRAM)))
@@ -192,7 +192,7 @@ public class Burn {
             if (dp.abs().isGreaterThan(settings.getChamberPressureMaxDelta())) {
                 log.warn("DP " + dp + " too big!, Adjusting regstep down and repeating step!");
                 regStep = regStep.times(settings.getRegStepDecreaseFactor());
-                continue step;
+                continue;
             }
 
             next.thrust = motor.getNozzle().thrust(next.chamberPressure, settings.getAtmosphereicPressure(), settings.getAtmosphereicPressure(), motor.getFuel().getCombustionProduct().getRatioOfSpecificHeats2Phase());
@@ -216,7 +216,7 @@ public class Burn {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     /*
      * This converts the units of this constant to something JScience is able
      * to work from. This conversion is unchecked at compile time, but
@@ -233,10 +233,6 @@ public class Burn {
 
     public Amount<Force> thrust(Amount<Duration> time) {
         return getData().get(time).thrust;
-    }
-
-    public Amount<Dimensionless> kn(Amount<Length> regression) {
-        return motor.getGrain().surfaceArea(regression).divide(motor.getNozzle().throatArea()).to(Dimensionless.UNIT);
     }
 
     private <Q extends Quantity> boolean positive(Amount<Q> a) {
@@ -257,11 +253,12 @@ public class Burn {
     public static class BurnSettings {
         private BurnVolumeMethod volumeMethod = BurnVolumeMethod.SurfaceTimesRegression;
 
-		private double regStepIncreaseFactor = 1.01;
+        private double regStepIncreaseFactor = 1.01;
         private double regStepDecreaseFactor = .5;
         private Amount<Pressure> chamberPressureMaxDelta = Amount.valueOf(.5, SI.MEGA(SI.PASCAL));
         private Amount<Pressure> endPressure = Amount.valueOf(.1, RocketScience.PSI);
         private Amount<Pressure> atmosphereicPressure = Amount.valueOf(101000, SI.PASCAL);
+
         private BurnSettings() {
         }
 
@@ -316,10 +313,10 @@ public class Burn {
         public enum BurnVolumeMethod {
             DeltaVolume,
             SurfaceTimesRegression
-		}
+        }
     }
 
-    public class Interval {
+    public static class Interval {
         public Amount<Duration> time;
         public Amount<Duration> dt;
         public Amount<Length> regression;

@@ -7,13 +7,12 @@ import com.billkuker.rocketry.motorsim.RocketScience;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 public class MultiMotorTable extends JTable implements BurnWatcher, RocketScience.UnitPreferenceListener {
     private static final long serialVersionUID = 1L;
-    private final List<Entry> entries = new Vector<Entry>();
+    private final List<Entry> entries = new Vector<>();
     private final TM tm = new TM();
 
     public MultiMotorTable() {
@@ -30,11 +29,7 @@ public class MultiMotorTable extends JTable implements BurnWatcher, RocketScienc
     }
 
     public void removeBurn(Burn b) {
-        Iterator<Entry> i = entries.iterator();
-        while (i.hasNext()) {
-            if (i.next().m == b.getMotor())
-                i.remove();
-        }
+        entries.removeIf(entry -> entry.m == b.getMotor());
         tm.fireTableDataChanged();
     }
 
@@ -51,7 +46,7 @@ public class MultiMotorTable extends JTable implements BurnWatcher, RocketScienc
         tm.fireTableDataChanged();
     }
 
-    private class Entry {
+    private static class Entry {
         Motor m;
         BurnSummary bs;
     }

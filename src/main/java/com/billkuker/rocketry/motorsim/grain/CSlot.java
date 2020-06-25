@@ -102,9 +102,9 @@ public class CSlot extends ExtrudedShapeGrain implements Validating {
 
     public void validate() throws ValidationException {
         if (oD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid oD");
+            throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid Length");
+            throw new ValidationException("Invalid Length");
     }
 
 }

@@ -12,7 +12,7 @@ public abstract class ClassChooser<T> extends JComboBox<T> {
 
     @SuppressWarnings("unchecked")
     public ClassChooser(Collection<Class<? extends T>> options, T current) {
-        super(new DefaultComboBoxModel<T>());
+        super(new DefaultComboBoxModel<>());
         DefaultComboBoxModel<T> model = (DefaultComboBoxModel<T>) getModel();
         for (Class<? extends T> clazz : options) {
             Element e = new Element(clazz);

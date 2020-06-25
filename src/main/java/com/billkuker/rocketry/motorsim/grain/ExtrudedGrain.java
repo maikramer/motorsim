@@ -8,10 +8,10 @@ import javax.measure.unit.SI;
 import java.beans.PropertyVetoException;
 
 public abstract class ExtrudedGrain implements Grain {
+    private final Amount<Length> endLight = Amount.valueOf(0, SI.MILLIMETER);
     private boolean foreEndInhibited = false;
     private boolean aftEndInhibited = false;
     private Amount<Length> length = Amount.valueOf(100, SI.MILLIMETER);
-    private final Amount<Length> endLight = Amount.valueOf(0, SI.MILLIMETER);
 
     protected int numberOfBurningEnds(Amount<Length> regression) {
         if (regression.isLessThan(endLight))

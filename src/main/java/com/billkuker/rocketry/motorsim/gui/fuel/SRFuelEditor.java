@@ -7,12 +7,8 @@ import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Pressure;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -24,9 +20,9 @@ public class SRFuelEditor extends AbstractFuelEditor {
 
     private static final NumberFormat nf = new DecimalFormat("##########.###");
     final EditablePiecewiseSaintRobertFuel f;
+    private final Vector<Entry> entries = new Vector<>();
     JPanel controls;
 
-	private final Vector<Entry> entries = new Vector<Entry>();
     public SRFuelEditor(EditablePiecewiseSaintRobertFuel f) {
         super(f);
         this.f = f;
@@ -63,12 +59,9 @@ public class SRFuelEditor extends AbstractFuelEditor {
 
 
         JButton add = new JButton("Add Data");
-        add.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                entries.add(new Entry());
-                tm.fireTableDataChanged();
-            }
+        add.addActionListener(e -> {
+            entries.add(new Entry());
+            tm.fireTableDataChanged();
         });
         controls = new JPanel();
         controls.setPreferredSize(new Dimension(200, 50));
@@ -88,16 +81,13 @@ public class SRFuelEditor extends AbstractFuelEditor {
 
         si.setSelected(true);
 
-        si.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (si.isSelected()) {
-                    f.setType(Type.SI);
-                } else {
-                    f.setType(Type.NONSI);
-                }
-                update();
+        si.addChangeListener(e -> {
+            if (si.isSelected()) {
+                f.setType(Type.SI);
+            } else {
+                f.setType(Type.NONSI);
             }
+            update();
         });
 
         editBottom.setBottomComponent(controls);
@@ -108,7 +98,7 @@ public class SRFuelEditor extends AbstractFuelEditor {
         return editBottom;
     }
 
-    private class Entry implements Comparable<Entry> {
+    private static class Entry implements Comparable<Entry> {
         Amount<Pressure> p = Amount.valueOf(0, RocketScience.UnitPreference.getUnitPreference().getPreferredUnit(RocketScience.PSI));
         double a;
         double n;

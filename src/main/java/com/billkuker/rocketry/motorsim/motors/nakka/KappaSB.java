@@ -41,7 +41,7 @@ public class KappaSB extends Motor {
         setNozzle(n);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         KappaSB m = new KappaSB();
         Burn b = new Burn(m);
         new BurnPanel(b).showAsWindow();

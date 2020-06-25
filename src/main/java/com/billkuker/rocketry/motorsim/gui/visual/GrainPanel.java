@@ -41,7 +41,6 @@ public class GrainPanel extends JPanel {
             });
         }
 
-
         try {
 
             area = new Chart<>(

@@ -103,7 +103,7 @@ public class RodAndTubeGrain extends CompoundGrain implements Validating {
         rod.validate();
         tube.validate();
         if (rod.getOD().isGreaterThan(tube.getID()))
-            throw new ValidationException(this, "Rod does not fit inside tube");
+            throw new ValidationException("Rod does not fit inside tube");
 
     }
 }

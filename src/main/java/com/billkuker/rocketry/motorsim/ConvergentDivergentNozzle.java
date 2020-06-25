@@ -64,9 +64,7 @@ public class ConvergentDivergentNozzle implements Nozzle, Validating {
 
         double d = pDiff.times(exitArea()).divide(Po.times(throatArea())).to(Dimensionless.UNIT).doubleValue(Dimensionless.UNIT);
 
-        double Cf = efficiency * Math.sqrt(a * b * c) + d;
-
-        return Cf;
+        return efficiency * Math.sqrt(a * b * c) + d;
     }
 
     public double getEfficiency() {
@@ -106,7 +104,7 @@ public class ConvergentDivergentNozzle implements Nozzle, Validating {
     }
 
     @Override
-    public void validate() throws ValidationException {
+    public void validate() {
         if (exitDiameter != null && throatDiameter.isGreaterThan(exitDiameter))
             throw new IllegalArgumentException("Throat > Exit");
     }

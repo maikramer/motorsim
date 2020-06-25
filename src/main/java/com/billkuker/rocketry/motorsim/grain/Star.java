@@ -101,16 +101,16 @@ public class Star extends ExtrudedShapeGrain implements Validating {
     @Override
     public void validate() throws ValidationException {
         if (iD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid iD");
+            throw new ValidationException("Invalid iD");
         if (oD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid oD");
+            throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid Length");
+            throw new ValidationException("Invalid Length");
         if (iD.isGreaterThan(oD))
-            throw new ValidationException(this, "iD > oD");
+            throw new ValidationException("iD > oD");
         if (iD.isGreaterThan(pD))
-            throw new ValidationException(this, "iD > pD");
+            throw new ValidationException("iD > pD");
         if (pD.isGreaterThan(oD))
-            throw new ValidationException(this, "pD > oD");
+            throw new ValidationException("pD > oD");
     }
 }

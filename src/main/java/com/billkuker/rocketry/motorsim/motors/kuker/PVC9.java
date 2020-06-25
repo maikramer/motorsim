@@ -41,7 +41,7 @@ public class PVC9 extends Motor {
         setNozzle(n);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         PVC9 m = new PVC9();
         Burn b = new Burn(m);
         new BurnPanel(b).showAsWindow();

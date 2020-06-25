@@ -10,8 +10,6 @@ import javax.measure.unit.SI;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Collections;
 import java.util.Map;
@@ -20,9 +18,9 @@ import java.util.Vector;
 public class LinearFuelEditor extends AbstractFuelEditor {
     private static final long serialVersionUID = 1L;
     final EditablePiecewiseLinearFuel f;
+    private final Vector<Entry> entries = new Vector<>();
     JPanel controls;
 
-	private final Vector<Entry> entries = new Vector<Entry>();
     public LinearFuelEditor(EditablePiecewiseLinearFuel f) {
         super(f);
         this.f = f;
@@ -57,12 +55,9 @@ public class LinearFuelEditor extends AbstractFuelEditor {
 
 
         JButton add = new JButton("Add Data");
-        add.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                entries.add(new Entry());
-                tm.fireTableDataChanged();
-            }
+        add.addActionListener(e -> {
+            entries.add(new Entry());
+            tm.fireTableDataChanged();
         });
         controls = new JPanel();
         controls.setPreferredSize(new Dimension(200, 50));
@@ -78,7 +73,7 @@ public class LinearFuelEditor extends AbstractFuelEditor {
         return editBottom;
     }
 
-    private class Entry implements Comparable<Entry> {
+    private static class Entry implements Comparable<Entry> {
         Amount<Pressure> p = Amount.valueOf(0, RocketScience.UnitPreference.getUnitPreference().getPreferredUnit(RocketScience.PSI));
         Amount<Velocity> v = Amount.valueOf(0, RocketScience.UnitPreference.getUnitPreference().getPreferredUnit(SI.METERS_PER_SECOND));
 

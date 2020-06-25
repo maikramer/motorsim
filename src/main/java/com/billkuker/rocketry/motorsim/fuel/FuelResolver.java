@@ -16,8 +16,8 @@ import java.util.*;
 public class FuelResolver {
     private static final Logger log = LogManager.getLogger(FuelResolver.class);
     private static final Set<WeakReference<FuelsChangeListener>> listeners = new HashSet<>();
-    private static final Map<URI, Fuel> fuels = new HashMap<URI, Fuel>();
-    private static final Map<Fuel, URI> uris = new HashMap<Fuel, URI>();
+    private static final Map<URI, Fuel> fuels = new HashMap<>();
+    private static final Map<Fuel, URI> uris = new HashMap<>();
 
     static {
         try {

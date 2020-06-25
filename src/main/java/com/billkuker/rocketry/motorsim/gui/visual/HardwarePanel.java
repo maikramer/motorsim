@@ -11,7 +11,6 @@ import javax.measure.unit.SI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Area;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class HardwarePanel extends JPanel {
@@ -19,16 +18,11 @@ public class HardwarePanel extends JPanel {
     final Motor m;
 
 
-    private final PropertyChangeListener repainter = new PropertyChangeListener() {
-        public void propertyChange(PropertyChangeEvent evt) {
-            repaint();
-        }
-    };
-
     public HardwarePanel(Motor m) {
         this.m = m;
         Nozzle nozzle = m.getNozzle();
         Chamber chamber = m.getChamber();
+        PropertyChangeListener repainter = evt -> repaint();
         if (nozzle instanceof ChangeListening.Subject) {
             ((ChangeListening.Subject) nozzle).addPropertyChangeListener(repainter);
         }
@@ -37,7 +31,7 @@ public class HardwarePanel extends JPanel {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Motor m = MotorEditor.defaultMotor();
         new HardwarePanel(m).showAsWindow();
     }

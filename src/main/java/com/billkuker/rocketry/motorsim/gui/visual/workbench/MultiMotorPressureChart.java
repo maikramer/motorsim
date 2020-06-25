@@ -2,7 +2,6 @@ package com.billkuker.rocketry.motorsim.gui.visual.workbench;
 
 import com.billkuker.rocketry.motorsim.Burn;
 import com.billkuker.rocketry.motorsim.RocketScience;
-import com.billkuker.rocketry.motorsim.RocketScience.UnitPreferenceListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -25,32 +24,23 @@ public class MultiMotorPressureChart extends JPanel implements BurnWatcher {
 
     private final XYSeriesCollection dataset = new XYSeriesCollection();
 
-    private final HashMap<Burn, XYSeries> burnToSeries = new HashMap<Burn, XYSeries>();
+    private final HashMap<Burn, XYSeries> burnToSeries = new HashMap<>();
     private Unit<Duration> time;
     private Unit<Pressure> pressureUnit;
 
     public MultiMotorPressureChart() {
         this.setLayout(new BorderLayout());
-        RocketScience.addUnitPreferenceListener(new UnitPreferenceListener() {
-            @Override
-            public void preferredUnitsChanged() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeAll();
-                        dataset.removeAllSeries();
-                        Set<Burn> burns = new HashSet<Burn>();
-                        burns.addAll(burnToSeries.keySet());
-                        burnToSeries.clear();
-                        setup();
-                        for (Burn b : burns) {
-                            addBurn(b);
-                        }
-                        revalidate();
-                    }
-                });
+        RocketScience.addUnitPreferenceListener(() -> SwingUtilities.invokeLater(() -> {
+            removeAll();
+            dataset.removeAllSeries();
+            Set<Burn> burns = new HashSet<>(burnToSeries.keySet());
+            burnToSeries.clear();
+            setup();
+            for (Burn b : burns) {
+                addBurn(b);
             }
-        });
+            revalidate();
+        }));
         setup();
     }
 

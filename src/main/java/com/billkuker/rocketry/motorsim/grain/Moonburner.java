@@ -75,15 +75,15 @@ public class Moonburner extends ExtrudedShapeGrain implements Validating {
 
     public void validate() throws ValidationException {
         if (iD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid iD");
+            throw new ValidationException("Invalid iD");
         if (oD.equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid oD");
+            throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
-            throw new ValidationException(this, "Invalid Length");
+            throw new ValidationException("Invalid Length");
         if (iD.isGreaterThan(oD))
-            throw new ValidationException(this, "iD > oD");
+            throw new ValidationException("iD > oD");
         if (coreOffset.isGreaterThan(iD.plus(oD).divide(2.0)))
-            throw new ValidationException(this, "Core offset too large");
+            throw new ValidationException("Core offset too large");
     }
 
 }

@@ -20,11 +20,10 @@ import java.util.prefs.Preferences;
 
 public class RocketScience {
     private static final Logger log = LogManager.getLogger(RocketScience.class);
-
+    private static final HashSet<WeakReference<UnitPreferenceListener>> prefListeners = new HashSet<>();
     public static Unit<Pressure> PSI = new ProductUnit<>(NonSI.POUND_FORCE.divide(NonSI.INCH.pow(2)));
     public static Unit<Impulse> NEWTON_SECOND = new ProductUnit<>(SI.NEWTON.times(SI.SECOND));
     public static Unit<Impulse> POUND_SECOND = new ProductUnit<>(NonSI.POUND_FORCE.times(SI.SECOND));
-    private static final HashSet<WeakReference<UnitPreferenceListener>> prefListeners = new HashSet<>();
 
     static {
         UnitFormat.getInstance().label(PSI, "psi");

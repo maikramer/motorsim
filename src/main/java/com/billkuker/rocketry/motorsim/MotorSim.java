@@ -23,12 +23,7 @@ public class MotorSim {
         new Splash("splash.png", 2000);
         final MotorWorkbench mw = new MotorWorkbench();
         Thread.sleep(2000);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                mw.setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> mw.setVisible(true));
 
 
     }

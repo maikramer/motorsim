@@ -1,10 +1,11 @@
 package com.billkuker.rocketry.motorsim.log;
+
 import java.text.SimpleDateFormat;
-        import java.util.Date;
-        import java.util.logging.Formatter;
-        import java.util.logging.Handler;
-        import java.util.logging.Level;
-        import java.util.logging.LogRecord;
+import java.util.Date;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 // this custom formatter formats parts of a log record to a single line
 class HtmlFormatter extends Formatter {

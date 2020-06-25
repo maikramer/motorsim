@@ -4,7 +4,7 @@ import com.billkuker.rocketry.motorsim.Fuel;
 import com.billkuker.rocketry.motorsim.Motor;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver.FuelNotFound;
-import com.billkuker.rocketry.motorsim.gui.visual.Editor;
+import com.billkuker.rocketry.motorsim.grain.MultiGrain;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -13,6 +13,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
@@ -23,22 +24,28 @@ import java.net.URISyntaxException;
 
 public class MotorIO {
     private static final Logger log = LogManager.getLogger(MotorIO.class);
-    @SuppressWarnings("deprecation")
+
     private static XStream getXStream() {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new StaxDriver());
+        xstream.omitField(Motor.class, "pcs");
+        xstream.omitField(MultiGrain.class, "pcs");
+        xstream.processAnnotations(Motor.class);
+        xstream.processAnnotations(MultiGrain.class);
         xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
         xstream.registerConverter(new AmountConverter());
         xstream.registerConverter(new FuelConverter());
-        xstream.registerConverter(new JavaBeanConverter(xstream.getMapper(), "class"), -20);
+        JavaBeanConverter converter = new JavaBeanConverter(xstream.getMapper());
+        xstream.registerConverter(converter, XStream.PRIORITY_VERY_LOW);
         return xstream;
     }
 
-    @SuppressWarnings("deprecation")
     private static XStream getFuelXStream() {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new StaxDriver());
         xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
         xstream.registerConverter(new AmountConverter());
-        xstream.registerConverter(new JavaBeanConverter(xstream.getMapper(), "class"), -20);
+        JavaBeanConverter converter = new JavaBeanConverter(xstream.getMapper());
+        xstream.registerConverter(converter, XStream.PRIORITY_VERY_LOW);
+
         return xstream;
     }
 
