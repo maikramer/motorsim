@@ -206,8 +206,8 @@ public class Burn {
 
             data.put(data.lastKey().plus(dt), next);
         }
-
         long time = new Date().getTime() - start;
+        System.out.println("Burn took " + time + " millis.");
         log.info("Burn took " + time + " millis.");
         done = true;
         for (BurnProgressListener bpl : bpls) {

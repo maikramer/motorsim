@@ -202,6 +202,8 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
                 MotorEditor.this.remove(sp);
                 sp = null;
             }
+            if(currentThread != null && currentThread.isAlive()) currentThread.interrupt();
+            System.gc();
             currentThread = new Thread() {
                 {
                     setName("Burn " + motor.getName());
@@ -357,11 +359,8 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
 
             JPanel nameAndFuel = new JPanel();
             nameAndFuel.setLayout(new BoxLayout(nameAndFuel, BoxLayout.Y_AXIS));
-            MotorsEditor motorEditor = MotorsEditor.getInstance();
 
-            AddField(nameAndFuel, "Name:", () -> motor.getName(), (Object value) -> motor.setName((String) value), null, () -> {
-                motorEditor.setTitleAt(motorEditor.getSelectedIndex(), motor.getName());
-            });
+            AddField(nameAndFuel, "Name:", () -> motor.getName(), (Object value) -> motor.setName((String) value), null, null);
             AddField(nameAndFuel, "Manufacturer:", () -> motor.getManufacturer(), (Object value) -> motor.setManufacturer((String) value), null, null);
             JLabel l;
 
@@ -441,7 +440,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             nozzle.add(l);
             parts.add(nozzle);
 
-            motor.addPropertyChangeListener((PropertyChangeListener) arg0 -> {
+            motor.addPropertyChangeListener(arg0 -> {
                 setup();
                 setResizeWeight(.5);
                 setDividerLocation(.5);

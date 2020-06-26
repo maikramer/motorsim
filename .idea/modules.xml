@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MotorSim.iml" filepath="$PROJECT_DIR$/MotorSim.iml" />
       <module fileurl="file://$PROJECT_DIR$/motorsim.iml" filepath="$PROJECT_DIR$/motorsim.iml" />
     </modules>
   </component>

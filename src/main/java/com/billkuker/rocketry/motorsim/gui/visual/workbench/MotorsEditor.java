@@ -18,17 +18,16 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.Vector;
 
 public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
+    public static final String FILE_EXTENSION = ".ms2";
     private static final Logger log = LogManager.getLogger(MotorsEditor.class);
+    private static String lastPath = ".";
 
     private static final long serialVersionUID = 1L;
-    public static MotorsEditor getInstance() {
-        return instance;
-    }
-
-    private static MotorsEditor instance;
 
     MultiMotorThrustChart mbc = new MultiMotorThrustChart();
     MultiMotorPressureChart mpc = new MultiMotorPressureChart();
@@ -40,7 +39,6 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
 
     public MotorsEditor(JFrame f) {
         super(f, "Motor");
-        instance = this;
 
         mmtScroll = new JScrollPane(mmt);
 
@@ -104,6 +102,25 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
         attach();
     }
 
+    public static String getLastPath() {
+        try {
+            Paths.get(lastPath);
+        } catch (InvalidPathException | NullPointerException ex) {
+            lastPath = ".";
+        }
+
+        return lastPath;
+    }
+
+    public static void setLastPath(String lastPath) {
+        try {
+            Paths.get(lastPath);
+        } catch (InvalidPathException | NullPointerException ex) {
+            lastPath = ".";
+        }
+        MotorsEditor.lastPath = lastPath;
+    }
+
     public void attach() {
         detachedTabs.remove(mbc);
         detachedTabs.remove(mpc);
@@ -148,11 +165,13 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
 
     @Override
     protected Motor loadFromFile(File f) throws IOException {
+        setLastPath(f.getParent());
         return MotorIO.readMotor(new FileInputStream(f));
     }
 
     @Override
     protected void saveToFile(Motor o, File f) throws IOException {
+        setLastPath(f.getParent());
         MotorIO.writeMotor(o, new FileOutputStream(f));
     }
 
@@ -169,14 +188,17 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
 
                     {
                         addActionListener(arg0 -> {
-
                             final FileDialog fd = new FileDialog(frame,
                                     "Export .ENG File", FileDialog.SAVE);
-                            fd.setFile("motorsim.eng");
+                            String tittle = getTitleAt(getSelectedIndex());
+                            fd.setFile(tittle +".eng");
+                            fd.setDirectory(getLastPath());
+                            fd.setFilenameFilter((File dir, String name)->name.endsWith(".eng"));
                             fd.setVisible(true);
                             if (fd.getFile() != null) {
                                 File file = new File(fd.getDirectory()
                                         + fd.getFile());
+                                setLastPath(fd.getDirectory());
                                 MotorEditor me = getSelectedEditor();
                                 Vector<Burn> bb = new Vector<>();
                                 bb.add(me.burn);

@@ -14,9 +14,9 @@
             <unpack>true</unpack>
             <scope>runtime</scope>
             <excludes>
-<!--                <exclude>junit:junit</exclude>-->
-<!--                <exclude>com.logfaces:lfsappenders</exclude>-->
-<!--                <exclude>org.apache.logging.log4j:log4j-core</exclude>-->
+                <exclude>junit:junit</exclude>
+                <exclude>com.logfaces:lfsappenders</exclude>
+                <exclude>org.apache.logging.log4j:log4j-core</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>

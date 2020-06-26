@@ -1,6 +1,7 @@
 package com.billkuker.rocketry.motorsim.gui.visual;
 
 import com.billkuker.rocketry.motorsim.Motor;
+import com.billkuker.rocketry.motorsim.gui.visual.workbench.MotorsEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -130,17 +131,26 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         if (e == null)
             return;
         final FileDialog fd = new FileDialog(frame, "Save" + noun + " As", FileDialog.SAVE);
+        OBJECT o = editorToObject.get(e);
+
+        fd.setFile(((Motor)o).getName() + MotorsEditor.FILE_EXTENSION);
+
+        fd.setDirectory(MotorsEditor.getLastPath());
+        fd.setFilenameFilter((File dir, String name)->name.endsWith(MotorsEditor.FILE_EXTENSION));
         fd.setVisible(true);
         if (fd.getFile() != null) {
             File file = new File(fd.getDirectory() + fd.getFile());
             try {
-                OBJECT o = editorToObject.get(e);
+                o = editorToObject.get(e);
                 saveToFile(o, file);
                 undirty(o);
                 objectToEditor.put(o, e);
                 editorToObject.put(e, o);
                 fileToEditor.put(file, e);
                 editorToFile.put(e, file);
+                setTitleAt(
+                        getSelectedIndex(),
+                        file.getName());
             } catch (Exception e1) {
                 errorDialog(e1);
             }
@@ -149,6 +159,8 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
 
     private void openDialog() {
         final FileDialog fd = new FileDialog(frame, "Open" + noun + "...", FileDialog.LOAD);
+        fd.setDirectory(MotorsEditor.getLastPath());
+        fd.setFilenameFilter((File dir, String name)->name.endsWith(MotorsEditor.FILE_EXTENSION));
         fd.setVisible(true);
         if (fd.getFile() != null) {
             File file = new File(fd.getDirectory() + fd.getFile());
@@ -265,13 +277,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         editorToObject.put(e, o);
         fileToEditor.put(f, e);
         editorToFile.put(e, f);
-        String tabName;
-        if(o instanceof Motor){
-            tabName = ((Motor) o).getName();
-        } else {
-            tabName = f.getName();
-        }
-        addTab(tabName, e);
+        addTab(f.getName(), e);
         objectAdded(o, e);
         setSelectedComponent(e);
     }
