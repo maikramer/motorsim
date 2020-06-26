@@ -24,6 +24,11 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
     private static final Logger log = LogManager.getLogger(MotorsEditor.class);
 
     private static final long serialVersionUID = 1L;
+    public static MotorsEditor getInstance() {
+        return instance;
+    }
+
+    private static MotorsEditor instance;
 
     MultiMotorThrustChart mbc = new MultiMotorThrustChart();
     MultiMotorPressureChart mpc = new MultiMotorPressureChart();
@@ -35,9 +40,9 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
 
     public MotorsEditor(JFrame f) {
         super(f, "Motor");
+        instance = this;
 
         mmtScroll = new JScrollPane(mmt);
-
 
         addCreator(new ObjectCreator() {
             @Override

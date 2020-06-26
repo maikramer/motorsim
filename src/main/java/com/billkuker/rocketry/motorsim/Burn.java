@@ -80,7 +80,6 @@ public class Burn {
 
         data.put(Amount.valueOf(0, SI.SECOND), initial);
 
-        step:
         for (int i = 0; i < 5000; i++) {
             assert (positive(regStep));
             regStep = regStep.times(settings.getRegStepIncreaseFactor());

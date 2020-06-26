@@ -39,7 +39,6 @@ public class ENGExporter {
         StringBuilder out = new StringBuilder();
 
         out.append(";Output from Motorsim, motorsim@billkuker.com\n");
-        out.append(";You must fill in Delays and Total Weight\n");
         out.append(";Name Diameter Length Delays ProWt Wt Manufacturer\n");
         out.append(b.getMotor().getName().replace(" ", "-")).append(" ");
 
@@ -55,8 +54,11 @@ public class ENGExporter {
 
         double delay = b.getMotor().getEjectionDelay().doubleValue(SI.SECOND);
         String delayString = Integer.toString((int) delay);
+        String manufacturer = b.getMotor().getManufacturer();
+        double caseWt = b.getMotor().getCasingWeight().doubleValue(SI.KILOGRAM);
 
-        out.append(nf.format(dia)).append(" ").append(nf.format(len)).append(" ").append(delayString).append("-0-0 ").append(nf.format(wt)).append(" ").append(nf.format(wt + 0.1)).append(" MF\n");
+        out.append(nf.format(dia)).append(" ").append(nf.format(len)).append(" ").append(delayString).append("-0-0 ").append(nf.format(wt)).append(" ")
+                .append(nf.format(wt + caseWt)).append(" ").append(manufacturer).append("\n");
 
         GraphSimplifier<Duration, Force> gs;
         try {

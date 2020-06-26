@@ -10,10 +10,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="MotorSim" />
+        <module name="motorsim" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="MotorSim" target="1.8" />
+      <module name="motorsim" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

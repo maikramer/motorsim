@@ -10,7 +10,6 @@ public class MotorSim {
 
     public static void main(String[] args) throws Exception {
         Locale.setDefault(Locale.ENGLISH);
-
         try {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty(

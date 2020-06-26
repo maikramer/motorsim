@@ -126,7 +126,7 @@
 		<one-jar destfile="${dist.dir}/installers/${destfilename}" manifest="manifest.mf">
 			<main>
 				<fileset dir="${src.dir}">
-					<include name="log4j.properties" />
+					<include name="log4j2.properties" />
 					<include name="martello.pem" />
 					<include name="MartelloKey.der" />
 				</fileset>
@@ -177,7 +177,7 @@
 		<delete dir='${temp.dir}/META-INF'/>
 		<jar jarfile="${dist.dir}/${name}-Fat.jar" basedir="${temp.dir}" includes="**/*.*" update="false" compress="true">
 			<fileset dir="${src.dir}">
-				<include name="log4j.properties" />
+				<include name="log4j2.properties" />
 				<include name="martello.pem" />
 				<include name="MartelloKey.der" />
 			</fileset>

@@ -9,12 +9,14 @@ import com.billkuker.rocketry.motorsim.fuel.KNSU;
 import com.billkuker.rocketry.motorsim.grain.*;
 import com.billkuker.rocketry.motorsim.gui.Colors;
 import com.billkuker.rocketry.motorsim.gui.visual.*;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Duration;
+import javax.measure.quantity.Mass;
 import javax.measure.unit.SI;
+import javax.measure.unit.Unit;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -81,6 +83,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
     public static Motor defaultMotor() {
         Motor m = new Motor();
         m.setName("New Motor " + ++idx);
+        m.setManufacturer("MF");
         try {
             m.setFuel(FuelResolver.getFuel(new URI("motorsim:KNDX")));
         } catch (Exception e) {
@@ -111,6 +114,7 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
         n.setExitDiameter(Amount.valueOf(44.55, SI.MILLIMETER));
         n.setEfficiency(.85);
         m.setNozzle(n);
+        m.setCasingWeight(Amount.valueOf(0, SI.KILOGRAM));
 
         return m;
     }
@@ -353,38 +357,13 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
 
             JPanel nameAndFuel = new JPanel();
             nameAndFuel.setLayout(new BoxLayout(nameAndFuel, BoxLayout.Y_AXIS));
+            MotorsEditor motorEditor = MotorsEditor.getInstance();
 
-            JLabel l = new JLabel("Name:");
-            l.setAlignmentX(LEFT_ALIGNMENT);
-            nameAndFuel.add(l);
-            nameAndFuel.add(new JTextField(motor.getName()) {
-                private static final long serialVersionUID = 1L;
-
-                {
-                    setAlignmentX(LEFT_ALIGNMENT);
-                    setMinimumSize(new Dimension(200, 20));
-                    setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
-                    final JTextField t = this;
-                    addFocusListener(new FocusListener() {
-
-                        @Override
-                        public void focusLost(FocusEvent e) {
-                            String n = t.getText();
-                            if (!"".equals(n) && !n.equals(motor.getName())) {
-                                motor.setName(n);
-                            } else {
-                                t.setText(motor.getName());
-                            }
-                        }
-
-                        @Override
-                        public void focusGained(FocusEvent e) {
-
-                        }
-                    });
-
-                }
+            AddField(nameAndFuel, "Name:", () -> motor.getName(), (Object value) -> motor.setName((String) value), null, () -> {
+                motorEditor.setTitleAt(motorEditor.getSelectedIndex(), motor.getName());
             });
+            AddField(nameAndFuel, "Manufacturer:", () -> motor.getManufacturer(), (Object value) -> motor.setManufacturer((String) value), null, null);
+            JLabel l;
 
             l = new JLabel("Fuel:");
             l.setAlignmentX(LEFT_ALIGNMENT);
@@ -438,43 +417,12 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             });
 
 
-            l = new JLabel("Delay:");
-            l.setAlignmentX(LEFT_ALIGNMENT);
-            nameAndFuel.add(l);
-            nameAndFuel.add(new JTextField(Double.toString(motor.getEjectionDelay().doubleValue(SI.SECOND))) {
-                private static final long serialVersionUID = 1L;
-
-                {
-                    setAlignmentX(LEFT_ALIGNMENT);
-                    setMinimumSize(new Dimension(200, 20));
-                    setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
-                    final JTextField t = this;
-                    addFocusListener(new FocusListener() {
-
-                        @Override
-                        public void focusLost(FocusEvent e) {
-                            try {
-                                String n = t.getText();
-                                double d = Double.parseDouble(n);
-                                Amount<Duration> delay = Amount.valueOf(d, SI.SECOND);
-                                if (delay != motor.getEjectionDelay()) {
-                                    motor.setEjectionDelay(delay);
-                                }
-                            } catch (Exception ex) {
-                                log.warn(e);
-                                setText(Double.toString(motor.getEjectionDelay().doubleValue(SI.SECOND)));
-                            }
-                        }
-
-                        @Override
-                        public void focusGained(FocusEvent e) {
-
-                        }
-                    });
-
-                }
-            });
-
+            AddField(nameAndFuel, "Delay", () -> motor.getEjectionDelay(), (Object value) -> {
+                if (value instanceof Amount<?>) motor.setEjectionDelay((Amount<Duration>) value);
+            }, SI.SECOND, null);
+            AddField(nameAndFuel, "Weight without Fuel", () -> motor.getCasingWeight(), (Object value) -> {
+                if (value instanceof Amount<?>) motor.setCasingWeight((Amount<Mass>) value);
+            }, SI.KILOGRAM, null);
 
             nameAndFuel.add(Box.createVerticalGlue());
             parts.add(nameAndFuel);
@@ -500,6 +448,98 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
             });
 
             setup();
+        }
+
+        private void AddField(JPanel nameAndFuel, String name, GetValueAction<?> getValueAction,
+                              SetValueAction<Object> setValueAction, Unit unit, OnChangeAction onChangeAction) {
+            JLabel l = new JLabel(name);
+            log.debug("AddField");
+            l.setAlignmentX(LEFT_ALIGNMENT);
+            nameAndFuel.add(l);
+            nameAndFuel.add(new JTextField() {
+                private static final long serialVersionUID = 1L;
+
+                {
+                    Object initialValue = getValueAction.getValue();
+                    if (unit != null && initialValue instanceof Amount<?>) {
+                        Amount<?> initialAmount = (Amount<?>) initialValue;
+                        setText("" + initialAmount.doubleValue(unit) + " " + unit);
+                    } else {
+                        setText((String) initialValue);
+                    }
+                    setAlignmentX(LEFT_ALIGNMENT);
+                    setMinimumSize(new Dimension(200, 20));
+                    setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
+                    final JTextField t = this;
+                    final String FROMFOCUSLOST = "FromFocusLlost";
+                    final boolean[] fromAction = {false};
+                    t.addFocusListener(new FocusListener() {
+                        @Override
+                        public void focusGained(FocusEvent focusEvent) {
+                            if (unit != null) {
+                                Amount<?> amount = (Amount<?>) getValueAction.getValue();
+                                t.setText(String.format("%.3f", amount.doubleValue(unit)));
+                            }
+                            selectAll();
+                        }
+
+                        @Override
+                        public void focusLost(FocusEvent focusEvent) {
+                            if (fromAction[0]) {
+                                fromAction[0] = false;
+                            } else {
+                                System.out.println("seting");
+                                setActionCommand(FROMFOCUSLOST);
+                                postActionEvent();
+                            }
+                        }
+                    });
+
+                    addActionListener(actionEvent -> {
+                        System.out.println("Command: " + actionEvent.getActionCommand());
+                        String n = t.getText();
+                        Object objectValue = getValueAction.getValue();
+                        if (!n.isEmpty()) {
+                            if (unit != null && objectValue instanceof Amount<?>) {
+                                double doubleValue;
+                                Amount<?> amount = (Amount<?>) objectValue;
+                                try {
+                                    String corrected = n.replace(',', '.');
+                                    doubleValue = Double.parseDouble(corrected);
+                                } catch (NumberFormatException e) {
+                                    t.setText("" + String.format("%.2f", amount.doubleValue(unit)) + " " + unit);
+                                    if (!actionEvent.getActionCommand().equals(FROMFOCUSLOST)) {
+                                        fromAction[0] = true;
+                                        t.transferFocusUpCycle();
+                                    }
+                                    return;
+                                }
+
+                                Amount<?> amountValue = Amount.valueOf(doubleValue, unit);
+                                if (amount != amountValue) {
+                                    setValueAction.setValue(amountValue);
+                                    if (onChangeAction != null) {
+                                        onChangeAction.call();
+                                    }
+                                    t.setText("" + String.format("%.2f", amountValue.doubleValue(unit)) + " " + unit);
+                                }
+                            } else if (objectValue != n) {
+                                setValueAction.setValue(n);
+                                if (onChangeAction != null) {
+                                    onChangeAction.call();
+                                }
+                                t.setText(((String) getValueAction.getValue()).trim());
+                            }
+                        }
+                        if (!actionEvent.getActionCommand().equals(FROMFOCUSLOST)) {
+                            fromAction[0] = true;
+                            t.transferFocusUpCycle();
+                        }
+
+                    });
+
+                }
+            });
         }
 
         private void setup() {
@@ -554,5 +594,16 @@ public class MotorEditor extends JPanel implements PropertyChangeListener, FuelR
         }
     }
 
+    public interface GetValueAction<T> {
+        T getValue();
+    }
+
+    public interface SetValueAction<T> {
+        void setValue(T value);
+    }
+
+    public interface OnChangeAction {
+        void call();
+    }
 
 }

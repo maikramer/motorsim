@@ -1,5 +1,7 @@
 package com.billkuker.rocketry.motorsim.gui.visual;
 
+import com.billkuker.rocketry.motorsim.Motor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -21,6 +23,8 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
     private final Map<File, EDITOR> fileToEditor = new HashMap<>();
     private final Map<EDITOR, File> editorToFile = new HashMap<>();
     private final Set<OBJECT> dirty = new HashSet<>();
+
+
 
 
     public MultiObjectEditor(final Frame frame, final String noun) {
@@ -137,9 +141,6 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
                 editorToObject.put(e, o);
                 fileToEditor.put(file, e);
                 editorToFile.put(e, file);
-                setTitleAt(
-                        getSelectedIndex(),
-                        file.getName());
             } catch (Exception e1) {
                 errorDialog(e1);
             }
@@ -264,7 +265,13 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         editorToObject.put(e, o);
         fileToEditor.put(f, e);
         editorToFile.put(e, f);
-        addTab(f.getName(), e);
+        String tabName;
+        if(o instanceof Motor){
+            tabName = ((Motor) o).getName();
+        } else {
+            tabName = f.getName();
+        }
+        addTab(tabName, e);
         objectAdded(o, e);
         setSelectedComponent(e);
     }

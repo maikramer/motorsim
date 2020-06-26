@@ -70,16 +70,12 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.png</include>
-                    <include>**/*.txt</include>
-                </includes>
             </resource>
             <resource>
-            <directory>${basedir}</directory>
-            <includes>
-                <include>pom.xml</include>
-            </includes>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>pom.xml</include>
+                </includes>
             </resource>
         </resources>
         <testResources>

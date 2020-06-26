@@ -3,6 +3,7 @@ package com.billkuker.rocketry.motorsim;
 import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Duration;
+import javax.measure.quantity.Mass;
 import javax.measure.unit.SI;
 
 public class Motor implements Validating {
@@ -11,6 +12,8 @@ public class Motor implements Validating {
     private Nozzle nozzle;
     private Fuel fuel;
     private String name;
+    private String manufacturer = "MF";
+    private Amount<Mass> casingWeight = Amount.valueOf(0, SI.KILOGRAM);
     private Amount<Duration> ejectionDelay = Amount.valueOf(5, SI.SECOND);
 
     public Motor() {
@@ -76,5 +79,21 @@ public class Motor implements Validating {
 
     public void setEjectionDelay(Amount<Duration> ejectionDelay) {
         this.ejectionDelay = ejectionDelay;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public Amount<Mass> getCasingWeight() {
+        return casingWeight;
+    }
+
+    public void setCasingWeight(Amount<Mass> casingWeight) {
+        this.casingWeight = casingWeight;
     }
 }
