@@ -20,14 +20,14 @@ public class KappaSB extends Motor {
 
         CylindricalChamber c = new CylindricalChamber();
         c.setLength(Amount.valueOf(16, NonSI.INCH));
-        c.setID(Amount.valueOf(2.37, NonSI.INCH));
+        c.setInnerDiameter(Amount.valueOf(2.37, NonSI.INCH));
         setChamber(c);
 
         CoredCylindricalGrain g = new CoredCylindricalGrain();
         try {
             g.setLength(Amount.valueOf(3.8, NonSI.INCH));
-            g.setOD(Amount.valueOf(2.23, NonSI.INCH));
-            g.setID(Amount.valueOf(.75, NonSI.INCH));
+            g.setOuterDiameter(Amount.valueOf(2.23, NonSI.INCH));
+            g.setInnerDiameter(Amount.valueOf(.75, NonSI.INCH));
         } catch (PropertyVetoException v) {
             throw new Error(v);
         }

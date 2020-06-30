@@ -1,30 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="fdffa228-7980-4398-a2fd-c0327368b1df" name="Default Changelist" comment="- Remember last folder.&#10;- Fix Memory leak.&#10;- Minor Fixes.">
-      <change afterPath="$PROJECT_DIR$/log/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MotorSim_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.ajdt.ui.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.ui.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.m2e.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple.ork" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/Burn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/Burn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MotorIOTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MotorIOTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/motorsim.iml" beforeDir="false" afterPath="$PROJECT_DIR$/motorsim.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/CylindricalChamber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/CylindricalChamber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/ICylindricalChamber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/ICylindricalChamber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/cases/Schedule40.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/cases/Schedule40.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/cases/Schedule80.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/cases/Schedule80.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/CoredCylindricalGrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/CoredCylindricalGrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/ExtrudedGrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/ExtrudedGrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/RodAndTubeGrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/RodAndTubeGrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/util/ExtrudedShapeGrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/util/ExtrudedShapeGrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/util/RotatedShapeGrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/grain/util/RotatedShapeGrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/Chart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/Chart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/Editor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/Editor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/MultiObjectEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/MultiObjectEditor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/workbench/MotorEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/workbench/MotorEditor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/workbench/MotorsEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/gui/visual/workbench/MotorsEditor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/jar-with-deps-with-exclude.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/jar-with-deps-with-exclude.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/io/ENGExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/io/ENGExporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/io/MotorIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/io/MotorIO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/example/CSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/example/CSlot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/example/EndBurner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/example/EndBurner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/kuker/PVC9.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/kuker/PVC9.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/nakka/KappaSB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/billkuker/rocketry/motorsim/motors/nakka/KappaSB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/CoredCylindricalGrainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/CoredCylindricalGrainTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/CylindricalChamberTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/CylindricalChamberTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/MotorIOTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/billkuker/rocketry/motorsim/test/MotorIOTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +57,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenRunner">
-    <option name="delegateBuildToMaven" value="true" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="usePluginRegistry" value="true" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectId" id="1dsIk06oT9UOhjXkNPdcxVSrUV4" />
   <component name="ProjectViewState">
@@ -47,8 +74,27 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/aspect" />
+    <property name="project.structure.last.edited" value="Facets" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.37471265" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.billkuker.rocketry.motorsim.MotorSim" />
+      <module name="motorsim" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.billkuker.rocketry.motorsim.MotorSim" />
+      <module name="motorsim" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -61,8 +107,26 @@
       <option name="presentableId" value="Default" />
       <updated>1593207512036</updated>
       <workItem from="1593207517029" duration="3566000" />
-      <workItem from="1593213607610" duration="1893000" />
+      <workItem from="1593213607610" duration="5762000" />
+      <workItem from="1593265057642" duration="21000" />
+      <workItem from="1593265094212" duration="684000" />
+      <workItem from="1593540962388" duration="5759000" />
     </task>
+    <task id="LOCAL-00001" summary="- Remember last folder.&#10;- Fix Memory leak.&#10;- Minor Fixes.">
+      <created>1593215593635</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1593215593635</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- Remember last folder.&#10;- Fix Memory leak.&#10;- Minor Fixes.">
+      <created>1593215610296</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1593215610296</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -78,43 +142,64 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Remember last folder.&#10;- Fix Memory leak.&#10;- Minor Fixes." />
     <option name="LAST_COMMIT_MESSAGE" value="- Remember last folder.&#10;- Fix Memory leak.&#10;- Minor Fixes." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="418" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593207654491">
+    <state x="418" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593224190796">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="418" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1593207654491" />
-    <state width="1874" height="269" key="GridCell.Tab.0.bottom" timestamp="1593215354261">
+    <state x="418" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1593224190796" />
+    <state x="692" y="308" width="525" height="423" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1593224150649">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1874" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1032@0.0.1920.1032" timestamp="1593215354261" />
-    <state width="1874" height="269" key="GridCell.Tab.0.center" timestamp="1593215354261">
+    <state x="692" y="308" width="525" height="423" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1593224150649" />
+    <state x="743" y="263" width="735" height="534" key="FileChooserDialogImpl" timestamp="1593223570275">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1874" height="269" key="GridCell.Tab.0.center/0.0.1920.1032@0.0.1920.1032" timestamp="1593215354261" />
-    <state width="1874" height="269" key="GridCell.Tab.0.left" timestamp="1593215354261">
+    <state x="743" y="263" width="735" height="534" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1593223570275" />
+    <state width="1874" height="269" key="GridCell.Tab.0.bottom" timestamp="1593546722055">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1874" height="269" key="GridCell.Tab.0.left/0.0.1920.1032@0.0.1920.1032" timestamp="1593215354261" />
-    <state width="1874" height="269" key="GridCell.Tab.0.right" timestamp="1593215354261">
+    <state width="1874" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1032@0.0.1920.1032" timestamp="1593546722055" />
+    <state width="1874" height="269" key="GridCell.Tab.0.center" timestamp="1593546722054">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1874" height="269" key="GridCell.Tab.0.right/0.0.1920.1032@0.0.1920.1032" timestamp="1593215354261" />
-    <state x="449" y="151" width="1022" height="737" key="SettingsEditor" timestamp="1593207739848">
+    <state width="1874" height="269" key="GridCell.Tab.0.center/0.0.1920.1032@0.0.1920.1032" timestamp="1593546722054" />
+    <state width="1874" height="269" key="GridCell.Tab.0.left" timestamp="1593546722051">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="449" y="151" width="1022" height="737" key="SettingsEditor/0.0.1920.1032@0.0.1920.1032" timestamp="1593207739848" />
-    <state x="555" y="252" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1593215500435">
+    <state width="1874" height="269" key="GridCell.Tab.0.left/0.0.1920.1032@0.0.1920.1032" timestamp="1593546722051" />
+    <state width="1874" height="269" key="GridCell.Tab.0.right" timestamp="1593546722054">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="555" y="252" width="800" height="535" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1593215500435" />
-    <state x="651" y="255" width="648" height="522" key="find.popup" timestamp="1593214512834">
+    <state width="1874" height="269" key="GridCell.Tab.0.right/0.0.1920.1032@0.0.1920.1032" timestamp="1593546722054" />
+    <state x="284" y="195" width="1022" height="737" key="SettingsEditor" timestamp="1593224055154">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="651" y="255" width="648" height="522" key="find.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1593214512834" />
+    <state x="284" y="195" width="1022" height="737" key="SettingsEditor/0.0.1920.1032@0.0.1920.1032" timestamp="1593224055154" />
+    <state width="254" height="198" key="ShowFilterAction_Filter_Popup" timestamp="1593545218209">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="254" height="198" key="ShowFilterAction_Filter_Popup/0.0.1920.1032@0.0.1920.1032" timestamp="1593545218209" />
+    <state x="555" y="252" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1593215620167">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="555" y="252" width="800" height="535" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1593215620167" />
+    <state x="100" y="100" width="1720" height="832" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1593546398100">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="100" y="100" width="1720" height="832" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1593546398100" />
+    <state x="651" y="255" width="648" height="522" key="find.popup" timestamp="1593546274730">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="651" y="255" width="648" height="522" key="find.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1593546274730" />
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1593546589000">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1593546589000" />
   </component>
 </project>

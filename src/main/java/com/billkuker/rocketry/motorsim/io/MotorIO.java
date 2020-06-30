@@ -1,9 +1,13 @@
 package com.billkuker.rocketry.motorsim.io;
 
+import com.billkuker.rocketry.motorsim.CylindricalChamber;
 import com.billkuker.rocketry.motorsim.Fuel;
+import com.billkuker.rocketry.motorsim.ICylindricalChamber;
 import com.billkuker.rocketry.motorsim.Motor;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver;
 import com.billkuker.rocketry.motorsim.fuel.FuelResolver.FuelNotFound;
+import com.billkuker.rocketry.motorsim.grain.CoredCylindricalGrain;
+import com.billkuker.rocketry.motorsim.grain.ExtrudedGrain;
 import com.billkuker.rocketry.motorsim.grain.MultiGrain;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -31,6 +35,10 @@ public class MotorIO {
         xstream.omitField(MultiGrain.class, "pcs");
         xstream.processAnnotations(Motor.class);
         xstream.processAnnotations(MultiGrain.class);
+        xstream.processAnnotations(ExtrudedGrain.class);
+        xstream.processAnnotations(CoredCylindricalGrain.class);
+        xstream.processAnnotations(CylindricalChamber.class);
+        xstream.processAnnotations(ICylindricalChamber.class);
         xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
         xstream.registerConverter(new AmountConverter());
         xstream.registerConverter(new FuelConverter());

@@ -225,4 +225,9 @@ public abstract class RotatedShapeGrain implements Grain {
         double areaFlatteningError = .001;
     }
 
+    @Override
+    public String toString(){
+        return this.getClass().getSimpleName();
+    }
+
 }

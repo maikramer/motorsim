@@ -19,11 +19,11 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		CoredCylindricalGrain g = new CoredCylindricalGrain();
 		
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-		g.setID(Amount.valueOf(10, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 		
-		g.setForeEndInhibited(false);
-		g.setAftEndInhibited(false);
+		g.setUpperEndInhibited(false);
+		g.setLowerEndInhibited(false);
 		g.setOuterSurfaceInhibited(true);
 		g.setInnerSurfaceInhibited(false);
 		
@@ -38,15 +38,15 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		
 		//thin and long
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-		g.setID(Amount.valueOf(10, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 		
 		assertApproximate(g.webThickness(), Amount.valueOf("10mm"));
 		
 		//thick and short
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(300, SI.MILLIMETER));
-		g.setID(Amount.valueOf(100, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(300, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(100, SI.MILLIMETER));
 		
 		assertApproximate(g.webThickness(), Amount.valueOf("50mm"));
 	}
@@ -57,8 +57,8 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		
 		//thin and long
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-		g.setID(Amount.valueOf(10, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 		g.setInnerSurfaceInhibited(true);
 		g.setOuterSurfaceInhibited(true);
 		
@@ -72,11 +72,11 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		
 		//thin and long
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-		g.setID(Amount.valueOf(10, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 		g.setInnerSurfaceInhibited(true);
 		g.setOuterSurfaceInhibited(true);
-		g.setForeEndInhibited(true);
+		g.setUpperEndInhibited(true);
 		
 		assertApproximate(g.webThickness(), Amount.valueOf("100mm"));
 
@@ -87,8 +87,8 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		CoredCylindricalGrain g = new CoredCylindricalGrain();
 		
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(60, SI.MILLIMETER));
-		g.setID(Amount.valueOf(20, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(60, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(20, SI.MILLIMETER));
 		g.setInnerSurfaceInhibited(true);
 		g.setOuterSurfaceInhibited(true);
 		
@@ -101,11 +101,11 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		CoredCylindricalGrain g = new CoredCylindricalGrain();
 		
 		g.setLength(Amount.valueOf(20, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(60, SI.MILLIMETER));
-		g.setID(Amount.valueOf(20, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(60, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(20, SI.MILLIMETER));
 		g.setInnerSurfaceInhibited(true);
 		g.setOuterSurfaceInhibited(true);
-		g.setForeEndInhibited(true);
+		g.setUpperEndInhibited(true);
 		
 		assertApproximate(g.webThickness(), Amount.valueOf("20mm"));
 
@@ -117,11 +117,11 @@ public class CoredCylindricalGrainTest extends AbstractRocketTest {
 		
 		//thin and long
 		g.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-		g.setID(Amount.valueOf(10, SI.MILLIMETER));
+		g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+		g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 		
-		g.setForeEndInhibited(false);
-		g.setAftEndInhibited(false);
+		g.setUpperEndInhibited(false);
+		g.setLowerEndInhibited(false);
 		g.setOuterSurfaceInhibited(true);
 		g.setInnerSurfaceInhibited(false);
 		

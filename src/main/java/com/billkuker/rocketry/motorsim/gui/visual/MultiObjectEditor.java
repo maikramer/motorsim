@@ -26,8 +26,6 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
     private final Set<OBJECT> dirty = new HashSet<>();
 
 
-
-
     public MultiObjectEditor(final Frame frame, final String noun) {
         this.frame = frame;
         this.noun = " " + noun.trim();
@@ -133,10 +131,10 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         final FileDialog fd = new FileDialog(frame, "Save" + noun + " As", FileDialog.SAVE);
         OBJECT o = editorToObject.get(e);
 
-        fd.setFile(((Motor)o).getName() + MotorsEditor.FILE_EXTENSION);
+        fd.setFile(((Motor) o).getName() + MotorsEditor.FILE_EXTENSION);
 
         fd.setDirectory(MotorsEditor.getLastPath());
-        fd.setFilenameFilter((File dir, String name)->name.endsWith(MotorsEditor.FILE_EXTENSION));
+        fd.setFilenameFilter((File dir, String name) -> name.endsWith(MotorsEditor.FILE_EXTENSION));
         fd.setVisible(true);
         if (fd.getFile() != null) {
             File file = new File(fd.getDirectory() + fd.getFile());
@@ -148,9 +146,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
                 editorToObject.put(e, o);
                 fileToEditor.put(file, e);
                 editorToFile.put(e, file);
-                setTitleAt(
-                        getSelectedIndex(),
-                        file.getName());
+                setTitleAt(getSelectedIndex(), file.getName().replace(MotorsEditor.FILE_EXTENSION, ""));
             } catch (Exception e1) {
                 errorDialog(e1);
             }
@@ -160,7 +156,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
     private void openDialog() {
         final FileDialog fd = new FileDialog(frame, "Open" + noun + "...", FileDialog.LOAD);
         fd.setDirectory(MotorsEditor.getLastPath());
-        fd.setFilenameFilter((File dir, String name)->name.endsWith(MotorsEditor.FILE_EXTENSION));
+        fd.setFilenameFilter((File dir, String name) -> name.endsWith(MotorsEditor.FILE_EXTENSION));
         fd.setVisible(true);
         if (fd.getFile() != null) {
             File file = new File(fd.getDirectory() + fd.getFile());
@@ -277,7 +273,7 @@ public abstract class MultiObjectEditor<OBJECT, EDITOR extends Component> extend
         editorToObject.put(e, o);
         fileToEditor.put(f, e);
         editorToFile.put(e, f);
-        addTab(f.getName(), e);
+        addTab(f.getName().replace(MotorsEditor.FILE_EXTENSION, ""), e);
         objectAdded(o, e);
         setSelectedComponent(e);
     }

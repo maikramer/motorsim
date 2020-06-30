@@ -20,7 +20,7 @@ public class CylindricalChamberTest extends AbstractRocketTest {
 		CylindricalChamber c = new CylindricalChamber();
 		
 		c.setLength(Amount.valueOf(100, SI.MILLIMETER));
-		c.setID(Amount.valueOf(20, SI.MILLIMETER));
+		c.setInnerDiameter(Amount.valueOf(20, SI.MILLIMETER));
 		
 		assertApproximate(c.chamberVolume(), Amount.valueOf(10000*Math.PI, SI.MILLIMETER.pow(3)));
 	}

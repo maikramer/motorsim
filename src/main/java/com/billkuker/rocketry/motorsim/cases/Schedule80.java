@@ -49,16 +49,16 @@ public class Schedule80 implements Chamber, ICylindricalChamber {
 
     public void setSize(Size size) {
         this.size = size;
-        chamber.setID(size.iD);
-        chamber.setOD(size.oD);
+        chamber.setInnerDiameter(size.iD);
+        chamber.setOuterDiameter(size.oD);
     }
 
-    public Amount<Length> getID() {
-        return chamber.getID();
+    public Amount<Length> getInnerDiameter() {
+        return chamber.getInnerDiameter();
     }
 
-    public Amount<Length> getOD() {
-        return chamber.getOD();
+    public Amount<Length> getOuterDiameter() {
+        return chamber.getOuterDiameter();
     }
 
     public enum Size {

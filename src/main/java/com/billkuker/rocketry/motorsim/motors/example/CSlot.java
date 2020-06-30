@@ -20,7 +20,7 @@ public class CSlot extends Motor {
 
         CylindricalChamber c = new CylindricalChamber();
         c.setLength(Amount.valueOf(150, SI.MILLIMETER));
-        c.setID(Amount.valueOf(50, SI.MILLIMETER));
+        c.setInnerDiameter(Amount.valueOf(50, SI.MILLIMETER));
         setChamber(c);
 
         setGrain(new ExtrudedShapeGrain() {
@@ -31,8 +31,8 @@ public class CSlot extends Motor {
                     xsection.inhibit(outside);
                     xsection.subtract(new Rectangle2D.Double(12.5, 13, 5, 30));
                     setLength(Amount.valueOf(150, SI.MILLIMETER));
-                    setForeEndInhibited(false);
-                    setAftEndInhibited(false);
+                    setUpperEndInhibited(false);
+                    setLowerEndInhibited(false);
                 } catch (Exception e) {
                     throw new Error(e);
                 }

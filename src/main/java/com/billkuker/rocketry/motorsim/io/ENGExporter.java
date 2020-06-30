@@ -42,7 +42,7 @@ public class ENGExporter {
         out.append(";Name Diameter Length Delays ProWt Wt Manufacturer\n");
         out.append(b.getMotor().getName().replace(" ", "-")).append(" ");
 
-        double dia = cha.getOD().doubleValue(SI.MILLIMETER);
+        double dia = cha.getOuterDiameter().doubleValue(SI.MILLIMETER);
         double len = cha.getLength().doubleValue(SI.MILLIMETER);
 
         Amount<Mass> prop = b.getMotor().getGrain().volume(

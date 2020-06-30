@@ -95,8 +95,8 @@ public class Chart<X extends Quantity, Y extends Quantity> extends JPanel implem
     public static void main(String[] args) throws Exception {
         CoredCylindricalGrain g = new CoredCylindricalGrain();
         g.setLength(Amount.valueOf(70, SI.MILLIMETER));
-        g.setOD(Amount.valueOf(30, SI.MILLIMETER));
-        g.setID(Amount.valueOf(10, SI.MILLIMETER));
+        g.setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+        g.setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
 
         Chart<Length, Area> c = new Chart<>(SI.MILLIMETER,
                 SI.MILLIMETER.pow(2).asType(Area.class), g, "surfaceArea", "Regression", "Area");

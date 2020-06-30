@@ -1,6 +1,7 @@
 package com.billkuker.rocketry.motorsim.grain;
 
 import com.billkuker.rocketry.motorsim.Validating;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Area;
@@ -18,24 +19,27 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
     public static CoredCylindricalGrain DEFAULT_GRAIN = new CoredCylindricalGrain() {
         {
             try {
-                setOD(Amount.valueOf(30, SI.MILLIMETER));
-                setID(Amount.valueOf(10, SI.MILLIMETER));
+                setOuterDiameter(Amount.valueOf(30, SI.MILLIMETER));
+                setInnerDiameter(Amount.valueOf(10, SI.MILLIMETER));
                 setLength(Amount.valueOf(70, SI.MILLIMETER));
                 setInnerSurfaceInhibited(false);
                 setOuterSurfaceInhibited(true);
-                setForeEndInhibited(false);
-                setAftEndInhibited(false);
+                setUpperEndInhibited(false);
+                setLowerEndInhibited(false);
             } catch (Exception e) {
                 throw new Error(e);
             }
         }
     };
-    private Amount<Length> oD, iD;
+    @XStreamAlias("OD")
+    private Amount<Length> outerDiameter;
+    @XStreamAlias("ID")
+    private Amount<Length> innerDiameter;
     private boolean outerSurfaceInhibited = true, innerSurfaceInhibited = false;
 
     public CoredCylindricalGrain() {
-        oD = Amount.valueOf(30, SI.MILLIMETER);
-        iD = Amount.valueOf(10, SI.MILLIMETER);
+        outerDiameter = Amount.valueOf(30, SI.MILLIMETER);
+        innerDiameter = Amount.valueOf(10, SI.MILLIMETER);
     }
 
     @Deprecated
@@ -53,15 +57,15 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         Amount<Length> cLength = regressedLength(regression);
 
         //Calculate regressed iD
-        Amount<Length> cID = iD;
+        Amount<Length> cID = innerDiameter;
         if (!innerSurfaceInhibited) {
-            cID = iD.plus(regression.times(2));
+            cID = innerDiameter.plus(regression.times(2));
         }
 
         //Calculate regressed oD
-        Amount<Length> cOD = oD;
+        Amount<Length> cOD = outerDiameter;
         if (!outerSurfaceInhibited) {
-            cOD = oD.minus(regression.times(2));
+            cOD = outerDiameter.minus(regression.times(2));
         }
 
         if (cID.isGreaterThan(cOD))
@@ -92,15 +96,15 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         Amount<Length> cLength = regressedLength(regression);
 
         //Calculate regressed iD
-        Amount<Length> cID = iD;
+        Amount<Length> cID = innerDiameter;
         if (!innerSurfaceInhibited) {
-            cID = iD.plus(regression.times(2));
+            cID = innerDiameter.plus(regression.times(2));
         }
 
         //Calculate regressed oD
-        Amount<Length> cOD = oD;
+        Amount<Length> cOD = outerDiameter;
         if (!outerSurfaceInhibited) {
-            cOD = oD.minus(regression.times(2));
+            cOD = outerDiameter.minus(regression.times(2));
         }
 
         if (cID.isGreaterThan(cOD))
@@ -118,13 +122,13 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
 
     @Override
     public void validate() throws ValidationException {
-        if (iD.equals(Amount.ZERO))
+        if (innerDiameter.equals(Amount.ZERO))
             throw new ValidationException("Invalid iD");
-        if (oD.equals(Amount.ZERO))
+        if (outerDiameter.equals(Amount.ZERO))
             throw new ValidationException("Invalid oD");
         if (getLength().equals(Amount.ZERO))
             throw new ValidationException("Invalid Length");
-        if (iD.isGreaterThan(oD))
+        if (innerDiameter.isGreaterThan(outerDiameter))
             throw new ValidationException("iD > oD");
 
         if (innerSurfaceInhibited && outerSurfaceInhibited)
@@ -140,9 +144,9 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
 
         Amount<Length> radial = null;
         if (!innerSurfaceInhibited && !outerSurfaceInhibited) {
-            radial = oD.minus(iD).divide(4); //Outer and inner exposed
+            radial = outerDiameter.minus(innerDiameter).divide(4); //Outer and inner exposed
         } else if (!innerSurfaceInhibited || !outerSurfaceInhibited) {
-            radial = oD.minus(iD).divide(2); //Outer or inner exposed
+            radial = outerDiameter.minus(innerDiameter).divide(2); //Outer or inner exposed
         } else if (innerSurfaceInhibited && outerSurfaceInhibited) {
             return axial;
         }
@@ -157,20 +161,20 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         return axial;
     }
 
-    public Amount<Length> getOD() {
-        return oD;
+    public Amount<Length> getOuterDiameter() {
+        return outerDiameter;
     }
 
-    public void setOD(Amount<Length> od) throws PropertyVetoException {
-        this.oD = od;
+    public void setOuterDiameter(Amount<Length> od) throws PropertyVetoException {
+        this.outerDiameter = od;
     }
 
-    public Amount<Length> getID() {
-        return iD;
+    public Amount<Length> getInnerDiameter() {
+        return innerDiameter;
     }
 
-    public void setID(Amount<Length> id) throws PropertyVetoException {
-        iD = id;
+    public void setInnerDiameter(Amount<Length> id) throws PropertyVetoException {
+        innerDiameter = id;
     }
 
     public java.awt.geom.Area getCrossSection(Amount<Length> regression) {
@@ -178,8 +182,8 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         if (regression.isLessThan(zero))
             regression = zero;
         double rmm = regression.doubleValue(SI.MILLIMETER);
-        double oDmm = oD.doubleValue(SI.MILLIMETER);
-        double iDmm = iD.doubleValue(SI.MILLIMETER);
+        double oDmm = outerDiameter.doubleValue(SI.MILLIMETER);
+        double iDmm = innerDiameter.doubleValue(SI.MILLIMETER);
 
         if (!outerSurfaceInhibited)
             oDmm -= 2.0 * rmm;
@@ -199,8 +203,8 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         if (regression.isLessThan(zero))
             regression = zero;
         double rmm = regression.doubleValue(SI.MILLIMETER);
-        double oDmm = oD.doubleValue(SI.MILLIMETER);
-        double iDmm = iD.doubleValue(SI.MILLIMETER);
+        double oDmm = outerDiameter.doubleValue(SI.MILLIMETER);
+        double iDmm = innerDiameter.doubleValue(SI.MILLIMETER);
         double lmm = regressedLength(regression).doubleValue(SI.MILLIMETER);
         double length = getLength().doubleValue(SI.MILLIMETER);
 
@@ -212,9 +216,9 @@ public class CoredCylindricalGrain extends ExtrudedGrain implements Validating {
         java.awt.geom.Area a = new java.awt.geom.Area();
 
         double top = -lmm / 2;
-        if (isForeEndInhibited() && !isAftEndInhibited())
+        if (isUpperEndInhibited() && !isLowerEndInhibited())
             top = -length / 2;
-        else if (isAftEndInhibited() && !isForeEndInhibited())
+        else if (isLowerEndInhibited() && !isUpperEndInhibited())
             top = length / 2 - lmm;
 
         a.add(new java.awt.geom.Area(new Rectangle2D.Double(-oDmm / 2, top, oDmm, lmm)));

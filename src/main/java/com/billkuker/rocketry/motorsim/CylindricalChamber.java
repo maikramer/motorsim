@@ -1,5 +1,6 @@
 package com.billkuker.rocketry.motorsim;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.jscience.physics.amount.Amount;
 
 import javax.measure.quantity.Length;
@@ -12,8 +13,10 @@ import java.awt.geom.Rectangle2D;
 
 public class CylindricalChamber implements Chamber, ICylindricalChamber {
     private Amount<Length> length = Amount.valueOf(200, SI.MILLIMETER);
-    private Amount<Length> oD = Amount.valueOf(31, SI.MILLIMETER);
-    private Amount<Length> iD = Amount.valueOf(30, SI.MILLIMETER);
+    @XStreamAlias("OD")
+    private Amount<Length> outerDiameter = Amount.valueOf(31, SI.MILLIMETER);
+    @XStreamAlias("ID")
+    private Amount<Length> innerDiameter = Amount.valueOf(30, SI.MILLIMETER);
     public CylindricalChamber() {
     }
 
@@ -22,7 +25,7 @@ public class CylindricalChamber implements Chamber, ICylindricalChamber {
     }
 
     public Amount<Volume> chamberVolume() {
-        return iD.divide(2).pow(2).times(Math.PI).times(length).to(SI.CUBIC_METRE);
+        return innerDiameter.divide(2).pow(2).times(Math.PI).times(length).to(SI.CUBIC_METRE);
     }
 
     public Amount<Length> getLength() {
@@ -33,26 +36,26 @@ public class CylindricalChamber implements Chamber, ICylindricalChamber {
         this.length = length;
     }
 
-    public Amount<Length> getID() {
-        return iD;
+    public Amount<Length> getInnerDiameter() {
+        return innerDiameter;
     }
 
-    public void setID(Amount<Length> id) {
-        iD = id;
+    public void setInnerDiameter(Amount<Length> id) {
+        innerDiameter = id;
     }
 
-    public Amount<Length> getOD() {
-        return oD;
+    public Amount<Length> getOuterDiameter() {
+        return outerDiameter;
     }
 
-    public void setOD(Amount<Length> oD) {
-        this.oD = oD;
+    public void setOuterDiameter(Amount<Length> oD) {
+        this.outerDiameter = oD;
     }
 
     @Override
     public Shape chamberShape() {
-        double ir = iD.doubleValue(SI.MILLIMETER) / 2;
-        double or = oD.doubleValue(SI.MILLIMETER) / 2;
+        double ir = innerDiameter.doubleValue(SI.MILLIMETER) / 2;
+        double or = outerDiameter.doubleValue(SI.MILLIMETER) / 2;
         double lenmm = length.doubleValue(SI.MILLIMETER);
         double thick = or - ir;
 

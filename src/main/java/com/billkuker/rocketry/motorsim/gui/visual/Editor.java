@@ -11,9 +11,12 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.beans.*;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Vector;
 
 public class Editor extends PropertySheetPanel {
@@ -48,6 +51,27 @@ public class Editor extends PropertySheetPanel {
         for (PropertyDescriptor prop : props) {
             if (prop.getName().equals("class"))
                 continue;
+            try {
+                Object ob = prop.getReadMethod().invoke(obj);
+                if(ob instanceof List && ((List) ob).size() == 1) {
+                    continue;
+                }
+
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            String name = prop.getName();
+            StringBuilder builder = new StringBuilder();
+            builder.append(Character.toUpperCase(name.charAt(0)));
+            for (int i = 1; i < name.length(); i++) {
+                char ch = name.charAt(i);
+                if(Character.isUpperCase(ch)){
+                    builder.append(" ");
+                }
+                builder.append(ch);
+            }
+            prop.setDisplayName(builder.toString());
             v.add(prop);
 
             if (Enum.class.isAssignableFrom(prop.getPropertyType())) {

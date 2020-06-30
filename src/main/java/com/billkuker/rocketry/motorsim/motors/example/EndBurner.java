@@ -18,7 +18,7 @@ public class EndBurner extends Motor {
 
         CylindricalChamber c = new CylindricalChamber();
         c.setLength(Amount.valueOf(150, SI.MILLIMETER));
-        c.setID(Amount.valueOf(50, SI.MILLIMETER));
+        c.setInnerDiameter(Amount.valueOf(50, SI.MILLIMETER));
         setChamber(c);
 
         setGrain(new RotatedShapeGrain() {

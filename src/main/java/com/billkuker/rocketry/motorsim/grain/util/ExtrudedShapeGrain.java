@@ -22,8 +22,8 @@ public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
                 xsection.inhibit(outside);
                 xsection.subtract(new Ellipse2D.Double(10, 10, 10, 10));
                 setLength(Amount.valueOf(70, SI.MILLIMETER));
-                setForeEndInhibited(false);
-                setAftEndInhibited(false);
+                setUpperEndInhibited(false);
+                setLowerEndInhibited(false);
             } catch (Exception e) {
                 throw new Error(e);
             }
@@ -126,10 +126,10 @@ public abstract class ExtrudedShapeGrain extends ExtrudedGrain {
         }
 
         //Shift up or down based on burning ends
-        if (isForeEndInhibited()) {
+        if (isUpperEndInhibited()) {
             res.transform(AffineTransform.getTranslateInstance(0, +rLenmm / 2.0));
         }
-        if (isAftEndInhibited()) {
+        if (isLowerEndInhibited()) {
             res.transform(AffineTransform.getTranslateInstance(0, -rLenmm / 2.0));
         }
         return res;

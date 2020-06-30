@@ -8,8 +8,8 @@ public interface ICylindricalChamber {
     Amount<Length> getLength();
 
 
-    Amount<Length> getID();
+    Amount<Length> getInnerDiameter();
 
 
-    Amount<Length> getOD();
+    Amount<Length> getOuterDiameter();
 }

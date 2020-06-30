@@ -20,14 +20,14 @@ public class PVC9 extends Motor {
 
         CylindricalChamber c = new CylindricalChamber();
         c.setLength(Amount.valueOf(200, SI.MILLIMETER));
-        c.setID(Amount.valueOf(25, SI.MILLIMETER));
+        c.setInnerDiameter(Amount.valueOf(25, SI.MILLIMETER));
         setChamber(c);
 
         CoredCylindricalGrain g = new CoredCylindricalGrain();
         try {
             g.setLength(Amount.valueOf(70, SI.MILLIMETER));
-            g.setOD(Amount.valueOf(23.5, SI.MILLIMETER));
-            g.setID(Amount.valueOf(7.9375, SI.MILLIMETER));
+            g.setOuterDiameter(Amount.valueOf(23.5, SI.MILLIMETER));
+            g.setInnerDiameter(Amount.valueOf(7.9375, SI.MILLIMETER));
         } catch (PropertyVetoException v) {
             throw new Error(v);
         }

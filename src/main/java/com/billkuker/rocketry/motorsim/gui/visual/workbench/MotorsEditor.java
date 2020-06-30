@@ -190,7 +190,7 @@ public class MotorsEditor extends MultiObjectEditor<Motor, MotorEditor> {
                         addActionListener(arg0 -> {
                             final FileDialog fd = new FileDialog(frame,
                                     "Export .ENG File", FileDialog.SAVE);
-                            String tittle = getTitleAt(getSelectedIndex());
+                            String tittle = getTitleAt(getSelectedIndex()).replace(FILE_EXTENSION, "");
                             fd.setFile(tittle +".eng");
                             fd.setDirectory(getLastPath());
                             fd.setFilenameFilter((File dir, String name)->name.endsWith(".eng"));

@@ -26,7 +26,7 @@ public class RodAndTubeGrain extends CompoundGrain implements Validating {
     public RodAndTubeGrain() {
         try {
             rod = new CoredCylindricalGrain();
-            rod.setID(Amount.valueOf(0, SI.MILLIMETER));
+            rod.setInnerDiameter(Amount.valueOf(0, SI.MILLIMETER));
             rod.setInnerSurfaceInhibited(true);
             rod.setOuterSurfaceInhibited(false);
             tube = new CoredCylindricalGrain();
@@ -46,27 +46,27 @@ public class RodAndTubeGrain extends CompoundGrain implements Validating {
     }
 
     public Amount<Length> getRodDiameter() {
-        return rod.getOD();
+        return rod.getOuterDiameter();
     }
 
     public void setRodDiameter(Amount<Length> od) throws PropertyVetoException {
-        rod.setOD(od);
+        rod.setOuterDiameter(od);
     }
 
     public Amount<Length> getTubeID() {
-        return tube.getID();
+        return tube.getInnerDiameter();
     }
 
     public void setTubeID(Amount<Length> id) throws PropertyVetoException {
-        tube.setID(id);
+        tube.setInnerDiameter(id);
     }
 
     public Amount<Length> getOd() {
-        return tube.getOD();
+        return tube.getOuterDiameter();
     }
 
     public void setOd(Amount<Length> od) throws PropertyVetoException {
-        tube.setOD(od);
+        tube.setOuterDiameter(od);
     }
 
     public Amount<Length> getLength() {
@@ -79,30 +79,30 @@ public class RodAndTubeGrain extends CompoundGrain implements Validating {
     }
 
     public boolean isAftEndInhibited() {
-        return rod.isAftEndInhibited();
+        return rod.isLowerEndInhibited();
     }
 
     public void setAftEndInhibited(boolean aftEndInhibited)
             throws PropertyVetoException {
-        rod.setAftEndInhibited(aftEndInhibited);
-        tube.setAftEndInhibited(aftEndInhibited);
+        rod.setLowerEndInhibited(aftEndInhibited);
+        tube.setLowerEndInhibited(aftEndInhibited);
     }
 
     public boolean isForeEndInhibited() {
-        return rod.isForeEndInhibited();
+        return rod.isUpperEndInhibited();
     }
 
     public void setForeEndInhibited(boolean foreEndInhibited)
             throws PropertyVetoException {
-        rod.setForeEndInhibited(foreEndInhibited);
-        tube.setForeEndInhibited(foreEndInhibited);
+        rod.setUpperEndInhibited(foreEndInhibited);
+        tube.setUpperEndInhibited(foreEndInhibited);
     }
 
     @Override
     public void validate() throws ValidationException {
         rod.validate();
         tube.validate();
-        if (rod.getOD().isGreaterThan(tube.getID()))
+        if (rod.getOuterDiameter().isGreaterThan(tube.getInnerDiameter()))
             throw new ValidationException("Rod does not fit inside tube");
 
     }
